@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<h2>
+  setBrowserLoginSession
+</h2>
+<hr>
+<div>
+  <p>
+    <label for="username">
+      Username
+      <input type="text" id="username">
+    </label>
+  </p>
+  <p>
+    <label for="password">
+      Password
+      <input type="password" id="password">
+    </label>
+  </p>
+  <p>
+    <button onclick="checkUserInformation()">submit</button>
+  </p>
+</div>
+<script>
+  const checkUserInformation = () => {
+    const user = {
+      username: document.querySelector("input#username").value,
+      password: document.querySelector("input#password").value
+    };
+    fetch("/api/user/checkUserInformation", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(user)
+    }).then(async r => {
+      const result = await r.json();
+      if (!!result['userInformation']) {
+        const { username, password } = result["userInformation"];
+        window.open(`https://lms.pknu.ac.kr/ilos/lo/login.acl?usr_id=${username}&usr_pwd=${password}`, "_blank");
+      } else {
+        alert("username and password does not match that stored in server");
+      }
+    });
+  };
+</script>
+</body>
+</html>
