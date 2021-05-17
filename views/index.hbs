@@ -9,22 +9,31 @@
 </head>
 <body>
 <h1>
-  /getCalender
+  Welcome to lms-watcher.
 </h1>
-<ol>
-  {{#each calenders}}
+<hr>
+<div>
+  <span>
+  account data
+</span>
+  <ul>
     <li>
-      {{title}}
+      username:
+      {{#if username}}
+        {{username}}
+      {{else}}
+        <a href="/user/setBrowserLoginSession">setBrowserLoginSession</a>
+      {{/if}}
+    </li>
+    <li>
+      menu
       <ul>
         <li>
-          startDate: {{startDate}}
-        </li>
-        <li>
-          endDate: {{endDate}}
+          <a target="_blank" href="/user">/user</a>
         </li>
       </ul>
     </li>
-  {{/each}}
-</ol>
+  </ul>
+</div>
 </body>
 </html>

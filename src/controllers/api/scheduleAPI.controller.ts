@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, Session } from '@nestjs/common';
 import { ScheduleService } from '../../services/schedule.service';
 
 @Controller('api/schedule')
@@ -8,13 +8,19 @@ export class ScheduleAPIController {
   }
 
   @Get('/getByCourseId')
-  public getByCourseId(@Query('id') id: string) {
-    return this.scheduleService.getByCourseId(id);
+  public getByCourseId(
+    @Query('id') id: string,
+    @Session() session: Record<string, any>,
+  ) {
+    return this.scheduleService.getByCourseId(id, session.username, session.password);
   }
 
   @Get('/getByCourseIdExceptComplete')
-  public getByCourseIdExceptComplete(@Query('id') id: string) {
-    return this.scheduleService.getByCourseIdExceptComplete(id);
+  public getByCourseIdExceptComplete(
+    @Query('id') id: string,
+    @Session() session: Record<string, any>,
+  ) {
+    return this.scheduleService.getByCourseIdExceptComplete(id, session.username, session.password);
   }
 
   @Get('/getHisCode')
@@ -23,8 +29,9 @@ export class ScheduleAPIController {
     @Query('seq') seq: number,
     @Query('kjKey') kjKey: string,
     @Query('ud') ud: number,
+    @Session() session: Record<string, any>,
   ) {
-    return this.scheduleService.getHisCode(id, seq, kjKey, ud);
+    return this.scheduleService.getHisCode(id, seq, kjKey, ud, session.username, session.password);
   }
 
   // @Get('/fulfillSchedule')

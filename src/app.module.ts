@@ -12,10 +12,11 @@ import { ReportService } from './services/report.service';
 import { ReportAPIController } from './controllers/api/reportAPI.controller';
 import { CalenderService } from './services/calender.service';
 import { CalenderAPIController } from './controllers/api/calenderAPI.controller';
+import { IndexController } from './controllers/index.controller';
 
 @Module({
   imports: [],
-  controllers: [CourseAPIController, ScheduleAPIController, UserAPIController, ReportAPIController, UserController, CalenderAPIController],
+  controllers: [CourseAPIController, ScheduleAPIController, UserAPIController, ReportAPIController, UserController, CalenderAPIController, IndexController],
   providers: [CourseService, ScheduleService, SessionService, UserService, CommonService, ReportService, CalenderService],
 })
 export class AppModule {}

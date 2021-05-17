@@ -11,8 +11,8 @@ export class CourseService {
   ) {
   }
 
-  public async getList() {
-    const cookie = await this.sessionService.getLoginSession();
+  public async getList(username:string, password:string) {
+    const cookie = await this.sessionService.getLoginSession(username, password);
     const body = await got.post(
       'https://lms.pknu.ac.kr/ilos/mp/course_register_list.acl',
       {

@@ -13,8 +13,8 @@ export class ScheduleService {
   ) {
   }
 
-  public async getByCourseId(id: string) {
-    const cookie = await this.sessionService.getLoginSession();
+  public async getByCourseId(id: string, username: string, password: string) {
+    const cookie = await this.sessionService.getLoginSession(username, password);
     await got.post('https://lms.pknu.ac.kr/ilos/st/course/eclass_room2.acl', {
       headers: { cookie },
       searchParams: {
@@ -54,7 +54,7 @@ export class ScheduleService {
             today: today,
             name,
             item: Number(item),
-            kjKey: id
+            kjKey: id,
           };
         };
         return eval($(v).attr()['onclick']);
@@ -74,13 +74,13 @@ export class ScheduleService {
     return scheduleArr;
   }
 
-  public async getByCourseIdExceptComplete(id: string) {
-    const scheduleArr = await this.getByCourseId(id);
+  public async getByCourseIdExceptComplete(id: string, username: string, password: string) {
+    const scheduleArr = await this.getByCourseId(id, username, password);
     return scheduleArr.filter((v) => v.percent !== '100%');
   }
 
-  public async getHisCode(itemId, seq, kjKey, ud) {
-    const cookie = await this.sessionService.getLoginSession();
+  public async getHisCode(itemId, seq, kjKey, ud, username: string, password: string) {
+    const cookie = await this.sessionService.getLoginSession(username, password);
     await got.post('https://lms.pknu.ac.kr/ilos/st/course/eclass_room2.acl', {
       headers: { cookie },
       searchParams: {

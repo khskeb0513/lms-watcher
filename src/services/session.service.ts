@@ -1,25 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import got from 'got';
 
-const username = process.env.USERNAME,
-  password = process.env.PASSWORD;
-
-console.log({
-  username: !!username,
-  password: !!password,
-});
-
 @Injectable()
 export class SessionService {
 
-  public async getUserInformation() {
-    return {
-      username,
-      password,
-    };
-  }
-
-  public async getLoginSession() {
+  public async getLoginSession(username: string, password: string) {
     const request = await got.post('https://lms.pknu.ac.kr/ilos/lo/login.acl', {
       form: {
         usr_id: username,

@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Session } from '@nestjs/common';
 import { CalenderService } from '../../services/calender.service';
 
 @Controller('api/calender')
@@ -9,12 +9,20 @@ export class CalenderAPIController {
   }
 
   @Get('/getCalender')
-  public async getCalender() {
-    return this.calenderService.getCalender()
+  public async getCalender(
+    @Session() session: Record<string, any>
+  ) {
+    return this.calenderService.getCalender(
+      session.username, session.password
+    )
   }
 
   @Get('/getReportCalender')
-  public async getReportCalender() {
-    return this.calenderService.getReportCalender()
+  public async getReportCalender(
+    @Session() session: Record<string, any>
+  ) {
+    return this.calenderService.getReportCalender(
+      session.username, session.password
+    )
   }
 }

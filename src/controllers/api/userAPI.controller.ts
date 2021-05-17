@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Post, Session } from '@nestjs/common';
 import { SessionService } from '../../services/session.service';
 import { UserService } from '../../services/user.service';
 
@@ -10,16 +10,17 @@ export class UserAPIController {
   ) {
   }
 
-  @Get('/getUserInformation')
-  public async getUserInformation() {
-    return this.sessionService.getUserInformation();
-  }
-
-  @Post('/checkUserInformation')
-  public async checkUserInformation(
+  @Post('/isUser')
+  public async isUser(
     @Body('username') username: string,
     @Body('password') password: string,
+    @Session() session: Record<string, any>,
   ) {
-    return this.userService.setBrowserLoginSession(username, password)
+    const isUser = await this.userService.isUser(username, password);
+    if (isUser) {
+      session.username = username;
+      session.password = password;
+    }
+    return { isUser };
   }
 }

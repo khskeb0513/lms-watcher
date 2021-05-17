@@ -8,13 +8,16 @@
   <title>Document</title>
 </head>
 <body>
+<h1>
+  /user/getIncompleteSchedule
+</h1>
 <ul>
   {{#each courses}}
     <li>
       과목명: {{title}}
     </li>
     <li>
-      <a href="https://lms.pknu.ac.kr/ilos/st/course/eclass_room2.acl?KJKEY={{id}}" target="_blank">
+      <a href="#" onclick="moveKj('https://lms.pknu.ac.kr/ilos/st/course/eclass_room2.acl?KJKEY={{id}}')">
       과목코드: {{id}}
       </a>
     </li>
@@ -60,5 +63,13 @@
     <hr>
   {{/each}}
 </ul>
+<h4>
+  auto controlled page.
+</h4>
+<object id="control-page" data="https://example.com" frameborder="0"></object>
+<hr>
+<script>
+  const moveKj = (kj) => document.querySelector("object#control-page").setAttribute("data", kj);
+</script>
 </body>
 </html>

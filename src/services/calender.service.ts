@@ -11,8 +11,8 @@ export class CalenderService {
   ) {
   }
 
-  public async getCalender() {
-    const cookie = await this.sessionService.getLoginSession();
+  public async getCalender(username: string, password: string) {
+    const cookie = await this.sessionService.getLoginSession(username, password);
     const body = (await got.post(
       'https://lms.pknu.ac.kr/ilos/main/main_schedule_view.acl',
       {
@@ -33,8 +33,8 @@ export class CalenderService {
     }).filter(v => !!v).sort((a, b) => (a.startDate.valueOf() - b.startDate.valueOf()));
   }
 
-  public async getReportCalender() {
-    const cookie = await this.sessionService.getLoginSession();
+  public async getReportCalender(username: string, password: string) {
+    const cookie = await this.sessionService.getLoginSession(username, password);
     const body = (await got.post(
       'https://lms.pknu.ac.kr/ilos/main/main_schedule_view.acl',
       {
@@ -68,7 +68,7 @@ export class CalenderService {
         }
       };
       const endDate = parseDate(String(detailArr.find(v => v.includes('마감일'))));
-      const lateEndDate = parseDate(String(detailArr.find(v => v.includes('지각'))))
+      const lateEndDate = parseDate(String(detailArr.find(v => v.includes('지각'))));
       const reportTitle = String($(v).parent().parent().first().find('div.schedule-show-control').text())
         .replace(/\n/ig, '').replace(/ {2}/g, '');
       return {

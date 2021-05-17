@@ -1,4 +1,4 @@
-import { Controller, Get, Render } from '@nestjs/common';
+import { Controller, Get, Render, Session } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 
 @Controller('user')
@@ -9,33 +9,47 @@ export class UserController {
   ) {
   }
 
+  @Get('/')
+  @Render('user/index')
+  public async root() {
+    return;
+  }
+
   @Get('/getIncompleteSchedule')
-  @Render('getIncompleteSchedule.hbs')
-  public async getIncompleteSchedule() {
-    return { courses: await this.userService.getIncompleteSchedule() };
+  @Render('user/getIncompleteSchedule')
+  public async getIncompleteSchedule(
+    @Session() session: Record<string, any>,
+  ) {
+    return { courses: await this.userService.getIncompleteSchedule(session.username, session.password) };
   }
 
   @Get('/getIncompleteReport')
-  @Render('getIncompleteReport')
-  public async getIncompleteReport() {
-    return { courses: await this.userService.getIncompleteReport() };
+  @Render('user/getIncompleteReport')
+  public async getIncompleteReport(
+    @Session() session: Record<string, any>,
+  ) {
+    return { courses: await this.userService.getIncompleteReport(session.username, session.password) };
   }
 
   @Get('/setBrowserLoginSession')
-  @Render('setBrowserLoginSession')
+  @Render('user/setBrowserLoginSession')
   public async setBrowserLoginSession() {
     return;
   }
 
   @Get('/getCalender')
-  @Render('getCalender')
-  public async getCalender() {
-    return { calenders: await this.userService.getCalender() }
+  @Render('user/getCalender')
+  public async getCalender(
+    @Session() session: Record<string, any>,
+  ) {
+    return { calenders: await this.userService.getCalender(session.username, session.password) };
   }
 
   @Get('/getReportCalender')
-  @Render('getReportCalender')
-  public async getReportCalender() {
-    return { calenders: await this.userService.getReportCalender() }
+  @Render('user/getReportCalender')
+  public async getReportCalender(
+    @Session() session: Record<string, any>,
+  ) {
+    return { calenders: await this.userService.getReportCalender(session.username, session.password) };
   }
 }

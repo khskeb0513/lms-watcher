@@ -9,7 +9,7 @@
 </head>
 <body>
 <h2>
-  setBrowserLoginSession
+  /user/setBrowserLoginSession
 </h2>
 <hr>
 <div>
@@ -35,19 +35,18 @@
       username: document.querySelector("input#username").value,
       password: document.querySelector("input#password").value
     };
-    fetch("/api/user/checkUserInformation", {
+    fetch("/api/user/isUser", {
       method: "post",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(user)
     }).then(async r => {
-      const result = await r.json();
-      if (!!result['userInformation']) {
-        const { username, password } = result["userInformation"];
-        window.open(`https://lms.pknu.ac.kr/ilos/lo/login.acl?usr_id=${username}&usr_pwd=${password}`, "_blank");
+      const body = await r.json()
+      if (body['isUser']) {
+        window.location.href = '/'
       } else {
-        alert("username and password does not match that stored in server");
+        alert('cannot found any user in lms.')
       }
     });
   };

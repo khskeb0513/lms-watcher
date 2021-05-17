@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Session } from '@nestjs/common';
 import { CourseService } from '../../services/course.service';
 
 @Controller('api/course')
@@ -7,7 +7,11 @@ export class CourseAPIController {
   }
 
   @Get('/getList')
-  public getList() {
-    return this.courseService.getList()
+  public getList(
+    @Session() session: Record<string, any>
+  ) {
+    return this.courseService.getList(
+      session.username, session.password
+    )
   }
 }

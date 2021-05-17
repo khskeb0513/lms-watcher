@@ -11,8 +11,8 @@ export class ReportService {
   ) {
   }
 
-  public async getByCourseId(id: string) {
-    const cookie = await this.sessionService.getLoginSession();
+  public async getByCourseId(id: string, username: string, password: string) {
+    const cookie = await this.sessionService.getLoginSession(username, password);
     await this.sessionService.moveKj(cookie, id);
     const body = (await got.get(
       'https://lms.pknu.ac.kr/ilos/st/course/report_list.acl',
@@ -42,9 +42,9 @@ export class ReportService {
     }).filter(v => !!v);
   }
 
-  public async getByCourseIdExceptComplete(id: string) {
-    return (await this.getByCourseId(id)).filter(v => {
-      return v.submitStatus.includes('미제출')
-    })
+  public async getByCourseIdExceptComplete(id: string, username:string, password:string) {
+    return (await this.getByCourseId(id, username, password)).filter(v => {
+      return v.submitStatus.includes('미제출');
+    });
   }
 }

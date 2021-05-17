@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, Session } from '@nestjs/common';
 import { ReportService } from '../../services/report.service';
 
 @Controller('api/report')
@@ -9,14 +9,16 @@ export class ReportAPIController {
   @Get('/getByCourseId')
   public getByCourseId(
     @Query('id') kjKey: string,
+    @Session() session: Record<string, any>,
   ) {
-    return this.reportService.getByCourseId(kjKey);
+    return this.reportService.getByCourseId(kjKey, session.username, session.password);
   }
 
   @Get('/getByCourseIdExceptComplete')
   public getByCourseIdExceptComplete(
     @Query('id') kjKey: string,
+    @Session() session: Record<string, any>,
   ) {
-    return this.reportService.getByCourseIdExceptComplete(kjKey);
+    return this.reportService.getByCourseIdExceptComplete(kjKey, session.username, session.password);
   }
 }
