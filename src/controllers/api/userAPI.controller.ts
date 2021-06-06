@@ -1,20 +1,19 @@
-import { Body, Controller, Post, Session } from '@nestjs/common';
-import { SessionService } from '../../services/session.service';
-import { UserService } from '../../services/user.service';
+import { Body, Controller, Post, Session } from "@nestjs/common";
+import { SessionService } from "../../services/session.service";
+import { UserService } from "../../services/user.service";
 
-@Controller('api/user')
+@Controller("api/user")
 export class UserAPIController {
   constructor(
     private readonly sessionService: SessionService,
-    private readonly userService: UserService,
-  ) {
-  }
+    private readonly userService: UserService
+  ) {}
 
-  @Post('/isUser')
+  @Post("/isUser")
   public async isUser(
-    @Body('username') username: string,
-    @Body('password') password: string,
-    @Session() session: Record<string, any>,
+    @Body("username") username: string,
+    @Body("password") password: string,
+    @Session() session: Record<string, any>
   ) {
     const isUser = await this.userService.isUser(username, password);
     if (isUser) {
