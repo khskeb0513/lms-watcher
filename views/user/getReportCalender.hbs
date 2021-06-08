@@ -11,26 +11,43 @@
 <h1>
   /user/getReportCalender
 </h1>
-<ol>
-  {{#each calenders}}
-    <li>
-      {{reportTitle}}
-      <ul>
-        <li>
-          courseTitle: {{courseTitle}}
-        </li>
-        <li>
-          endDate: {{endDate}}
-        </li>
-        <li>
-          lateEndDate: {{lateEndDate}}
-        </li>
-        <li>
-          submitStatus: {{submitStatus}}
-        </li>
-      </ul>
-    </li>
-  {{/each}}
-</ol>
+<p>
+  ========================================
+  <br>
+  course title
+  <br>
+  report title
+  <br>
+  ====================
+  <br>
+  submit status
+  <br>
+  endDate || lateEndDate
+  <br>
+  ========================================
+</p>
+{{#each calenders}}
+  <p>
+    ========================================
+    <br>
+    {{courseTitle}}
+    <br>
+    {{reportTitle}}
+    <br>
+    ====================
+    <br>
+    {{#if submitStatus}}
+      finished
+    {{/if}}
+    {{^if submitStatus}}
+      <b>not finished</b>
+    {{/if}}
+    <br>
+    {{endDate}} || {{lateEndDate}}
+    <br>
+    ========================================
+    <br>
+  </p>
+{{/each}}
 </body>
 </html>

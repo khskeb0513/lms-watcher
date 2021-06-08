@@ -11,65 +11,45 @@
 <h1>
   /user/getIncompleteSchedule
 </h1>
-<ul>
-  {{#each courses}}
-    <li>
-      과목명: {{title}}
-    </li>
-    <li>
-      <a href="#" onclick="moveKj('https://lms.pknu.ac.kr/ilos/st/course/eclass_room2.acl?KJKEY={{id}}')">
-      과목코드: {{id}}
-      </a>
-    </li>
-    <li>
-      미완과목
-      <ul>
-        {{#each incomplete}}
-          <li>
-            <a href="https://lms.pknu.ac.kr/ilos/st/course/online_view_form.acl?lecture_weeks={{seq}}&_KYKEY={{kjKey}}"
-            target="_blank">
-            name: {{name}}
-            </a>
-            <ul>
-              <li>
-                seq: {{seq}}
-              </li>
-              {{#d2}}
-                <li style="color: red;font-weight: bold">
-                  edDt: {{edDt}}
-                </li>
-              {{/d2}}
-              {{^d2}}
-                <li>
-                  edDt: {{edDt}}
-                </li>
-              {{/d2}}
-              <li>
-                item: {{item}}
-              </li>
-              <li>
-                percent: {{percent}}
-              </li>
-            </ul>
-          </li>
-        {{/each}}
-        {{^incomplete}}
-          <li>
-            null
-          </li>
-        {{/incomplete}}
-      </ul>
-    </li>
-    <hr>
-  {{/each}}
-</ul>
-<h4>
-  auto controlled page.
-</h4>
-<object id="control-page" data="https://example.com" frameborder="0"></object>
-<hr>
-<script>
-  const moveKj = (kj) => document.querySelector("object#control-page").setAttribute("data", kj);
-</script>
+<p>
+  ==================================================
+  <br>
+  course title || course id
+  <br>
+  ====================
+  <br>
+  name
+  <br>
+  seq || item || edDt || percent
+  <br>
+  ==========
+  <br>
+  ====================
+  <br>
+  ==================================================
+</p>
+{{#each courses}}
+  <p>
+    ==================================================
+    <br>
+    {{title}} || {{id}}
+    {{#if incomplete}}
+      <br>
+      ====================
+      {{#each incomplete}}
+        <br>
+        {{name}}
+        <br>
+        {{seq}} || {{item}} || {{edDt}} || {{percent}}
+        <br>
+        ==========
+      {{/each}}
+      <br>
+      ====================
+    {{/if}}
+    <br>
+    ==================================================
+  </p>
+{{/each}}
 </body>
 </html>
