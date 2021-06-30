@@ -64,7 +64,7 @@ export class CalenderService {
           });
         const submitStatusStr = detailArr.find((v) => v.includes("상태 : ")),
           submitStatus = !!submitStatusStr
-            ? !submitStatusStr.includes("미제출")
+            ? submitStatusStr.includes(" 제출")
             : null;
         const parseDate = (str: string) => {
           const onlyNumber = [...str]
