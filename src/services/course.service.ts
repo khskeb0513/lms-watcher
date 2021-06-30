@@ -23,7 +23,7 @@ export class CourseService {
       }
     );
     const $ = cheerio.load(body.body);
-    return $("a.site-font-color")
+    return $("a.site-link")
       .toArray()
       .map((v) => {
         return {
