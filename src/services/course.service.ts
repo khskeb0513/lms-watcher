@@ -18,7 +18,7 @@ export class CourseService {
         headers: { cookie },
         searchParams: {
           YEAR: 2021,
-          TERM: 1
+          TERM: 2
         }
       }
     );
