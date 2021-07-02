@@ -3,13 +3,18 @@ import got from "got";
 import * as cheerio from "cheerio";
 import { SessionService } from "./session.service";
 import { CommonService } from "./common.service";
+import { CourseService } from "./course.service";
+import HisDatabase from "../domain/HisDatabase";
 
 @Injectable()
 export class ScheduleService {
   constructor(
     private readonly sessionService: SessionService,
-    private readonly commonService: CommonService
-  ) {}
+    private readonly commonService: CommonService,
+    private readonly courseService: CourseService,
+    private readonly hisDatabase: HisDatabase
+  ) {
+  }
 
   public async getByCourseId(id: string, username: string, password: string) {
     const cookie = await this.sessionService.getLoginSession(
@@ -130,53 +135,6 @@ export class ScheduleService {
         }
       }
     );
-    return JSON.parse(body.body)["his_no"];
+    return parseInt(JSON.parse(body.body)["his_no"]);
   }
-
-  // public async fulfillSchedule(itemId, seq, kjKey, ud) {
-  //   const cookie = await this.sessionService.getLoginSession()
-  //   await got.post('https://lms.pknu.ac.kr/ilos/st/course/eclass_room2.acl', {
-  //     headers: { cookie },
-  //     searchParams: {
-  //       KJKEY: kjKey,
-  //       returnData: 'json',
-  //       returnURI: '%2Filos%2Fst%2Fcourse%2Fsubmain_form.acl',
-  //       encoding: 'utf-8',
-  //     },
-  //   });
-  //   const body = await got.post('https://lms.pknu.ac.kr/ilos/st/course/online_view_status.acl', {
-  //     headers: { cookie },
-  //     form: {
-  //       lecture_weeks: seq,
-  //       item_id: itemId,
-  //       link_seq: seq,
-  //       his_no: await this.getHisCode(itemId, seq, kjKey, ud),
-  //       ky: kjKey,
-  //       ud,
-  //       returnData: 'json',
-  //       encoding: 'utf-8'
-  //     },
-  //   });
-  //   return body.body
-  // }
-
-  // public async getHtml(id: string) {
-  //   const cookie = await sessionStorage.getLoginSession();
-  //   await got.post('https://lms.pknu.ac.kr/ilos/st/course/eclass_room2.acl', {
-  //     headers: { cookie },
-  //     searchParams: {
-  //       KJKEY: id,
-  //       returnData: 'json',
-  //       returnURI: '%2Filos%2Fst%2Fcourse%2Fsubmain_form.acl',
-  //       encoding: 'utf-8',
-  //     },
-  //   });
-  //   const body = await got.get(
-  //     'https://lms.pknu.ac.kr/ilos/st/course/online_list.acl',
-  //     {
-  //       headers: { cookie },
-  //     },
-  //   );
-  //   return body.body;
-  // }
 }

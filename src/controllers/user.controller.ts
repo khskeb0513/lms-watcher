@@ -22,6 +22,17 @@ export class UserController {
     };
   }
 
+  @Get("/getSchedule")
+  @Render("user/getIncompleteSchedule")
+  public async getSchedule(@Session() session: Record<string, any>) {
+    return {
+      courses: await this.userService.getSchedule(
+        session.username,
+        session.password
+      )
+    };
+  }
+
   @Get("/getIncompleteReport")
   @Render("user/getIncompleteReport")
   public async getIncompleteReport(@Session() session: Record<string, any>) {

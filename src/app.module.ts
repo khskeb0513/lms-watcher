@@ -13,9 +13,14 @@ import { ReportAPIController } from "./controllers/api/reportAPI.controller";
 import { CalenderService } from "./services/calender.service";
 import { CalenderAPIController } from "./controllers/api/calenderAPI.controller";
 import { IndexController } from "./controllers/index.controller";
+import { FulfillService } from './services/fulfill.service';
+import { VideoService } from './services/video.service';
+import HisDatabase from "./domain/HisDatabase";
+import UserDatabase from "./domain/UserDatabase";
 
 @Module({
-  imports: [],
+  imports: [
+  ],
   controllers: [
     CourseAPIController,
     ScheduleAPIController,
@@ -32,7 +37,11 @@ import { IndexController } from "./controllers/index.controller";
     UserService,
     CommonService,
     ReportService,
-    CalenderService
+    CalenderService,
+    HisDatabase,
+    UserDatabase,
+    FulfillService,
+    VideoService
   ]
 })
 export class AppModule {}

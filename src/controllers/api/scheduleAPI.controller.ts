@@ -1,9 +1,14 @@
 import { Controller, Get, Query, Session } from "@nestjs/common";
 import { ScheduleService } from "../../services/schedule.service";
+import { FulfillService } from "../../services/fulfill.service";
 
 @Controller("api/schedule")
 export class ScheduleAPIController {
-  constructor(private readonly scheduleService: ScheduleService) {}
+  constructor(
+    private readonly scheduleService: ScheduleService,
+    private readonly fulfillService: FulfillService
+  ) {
+  }
 
   @Get("/getByCourseId")
   public getByCourseId(
@@ -46,14 +51,4 @@ export class ScheduleAPIController {
       session.password
     );
   }
-
-  // @Get('/fulfillSchedule')
-  // public fulfillSchedule(
-  //   @Query('id') id: number,
-  //   @Query('seq') seq: number,
-  //   @Query('kjKey') kjKey: string,
-  //   @Query('ud') ud: number,
-  // ) {
-  //   return this.scheduleService.fulfillSchedule(id, seq, kjKey, ud);
-  // }
 }

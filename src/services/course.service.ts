@@ -5,7 +5,8 @@ import { SessionService } from "./session.service";
 
 @Injectable()
 export class CourseService {
-  constructor(private readonly sessionService: SessionService) {}
+  constructor(private readonly sessionService: SessionService) {
+  }
 
   public async getList(username: string, password: string) {
     const cookie = await this.sessionService.getLoginSession(
@@ -26,10 +27,10 @@ export class CourseService {
     return $("a.site-link")
       .toArray()
       .map((v) => {
-        return {
-          title: $(v).children().first().html(),
-          id: $(v).attr()["onclick"].slice(12, 27)
-        };
-      });
+        const title = $(v).children().first().html();
+        return title !== "수강취소하기" ? {
+          title, id: $(v).attr()["onclick"].split('\'')[1]
+        } : null;
+      }).filter(v => !!v);
   }
 }

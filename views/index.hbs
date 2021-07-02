@@ -12,28 +12,61 @@
   Welcome to lms-watcher.
 </h1>
 <hr>
-<div>
-  <span>
+<h3>
   account data
-</span>
-  <ul>
-    <li>
-      username:
-      {{#if username}}
-        {{username}}
-      {{else}}
-        <a href="/user/setBrowserLoginSession">setBrowserLoginSession</a>
-      {{/if}}
-    </li>
-    <li>
-      menu
-      <ul>
-        <li>
-          <a href="/user">/user</a>
-        </li>
-      </ul>
-    </li>
-  </ul>
-</div>
+</h3>
+<ul>
+  <li>
+    username:
+    {{#if username}}
+      {{username}}
+    {{else}}
+      <a href="/user/setBrowserLoginSession">setBrowserLoginSession</a>
+    {{/if}}
+  </li>
+</ul>
+<hr>
+<h3>
+  /user
+</h3>
+<ul>
+  <li>
+    <a href="/user/setBrowserLoginSession">/user/setBrowserLoginSession</a>
+  </li>
+  <li>
+    <a href="/user/getCalender">/user/getCalender</a>
+  </li>
+  <li>
+    <a href="/user/getReportCalender">/user/getReportCalender</a>
+  </li>
+  <li>
+    <a href="/user/getIncompleteReport">/user/getIncompleteReport</a>
+  </li>
+  <li>
+    <a href="/user/getIncompleteSchedule">/user/getIncompleteSchedule</a>
+  </li>
+</ul>
+<h3>
+  /api/user
+</h3>
+<ul>
+  <li>
+    <a href="/api/user/makeUserSync">/api/user/makeUserSync</a>
+  </li>
+  <li>
+    <a href="/api/user/getUsers">/api/user/getUsers</a>
+  </li>
+</ul>
+<h3>
+  /api/schedule
+</h3>
+<ul>
+  <li>
+    <a href="/api/schedule/fulfillSchedule">/api/schedule/fulfillSchedule</a>
+  </li>
+  <li>
+    <a href="/api/schedule/syncHisCode">/api/schedule/syncHisCode</a>
+  </li>
+</ul>
 </body>
 </html>
