@@ -93,4 +93,11 @@ export class UserAPIController {
   ) {
     return this.userService.getIncompleteHisCode(session.username, session.password);
   }
+
+  @Get("/getSchoolCalender")
+  public async getSchoolCalender(
+    @Session() session: Record<string, any>
+  ) {
+    return this.userService.getCalender(session.username, session.password);
+  }
 }
