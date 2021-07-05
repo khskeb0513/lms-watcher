@@ -98,6 +98,8 @@ export class UserAPIController {
   public async getSchoolCalender(
     @Session() session: Record<string, any>
   ) {
-    return this.userService.getCalender(session.username, session.password);
+    return {
+      schoolCalender: this.userService.getCalender(session.username, session.password)
+    };
   }
 }
