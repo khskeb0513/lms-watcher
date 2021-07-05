@@ -99,7 +99,7 @@ export class UserAPIController {
     @Session() session: Record<string, any>
   ) {
     return {
-      schoolCalender: this.userService.getCalender(session.username, session.password)
+      schoolCalender: await this.userService.getCalender(session.username, session.password)
     };
   }
 }
