@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Session } from "@nestjs/common";
+import { Body, Controller, Get, Post, Render, Session } from "@nestjs/common";
 import { SessionService } from "../../services/session.service";
 import { UserService } from "../../services/user.service";
 import { FulfillService } from "../../services/fulfill.service";
@@ -100,6 +100,16 @@ export class UserAPIController {
   ) {
     return {
       schoolCalender: await this.userService.getCalender(session.username, session.password)
+    };
+  }
+
+  @Get("/getSchedule")
+  public async getSchedule(@Session() session: Record<string, any>) {
+    return {
+      courses: await this.userService.getSchedule(
+        session.username,
+        session.password
+      )
     };
   }
 }
