@@ -8,12 +8,8 @@ export class CourseService {
   constructor(private readonly sessionService: SessionService) {
   }
 
-  public async getList(username: string, password: string) {
-    const cookie = await this.sessionService.getLoginSession(
-      username,
-      password
-    );
-    const body = await got.post(
+  public async getList(cookie: string) {
+    const response = await got.post(
       "https://lms.pknu.ac.kr/ilos/mp/course_register_list.acl",
       {
         headers: { cookie },
@@ -23,7 +19,7 @@ export class CourseService {
         }
       }
     );
-    const $ = cheerio.load(body.body);
+    const $ = cheerio.load(response.body);
     return $("a.site-link")
       .toArray()
       .map((v) => {

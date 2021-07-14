@@ -3,22 +3,14 @@ import { UserService } from "../services/user.service";
 
 @Controller("user")
 export class UserController {
-  constructor(private readonly userService: UserService) {}
-
-  @Get("/")
-  @Render("user/index")
-  public async root() {
-    return;
+  constructor(private readonly userService: UserService) {
   }
 
   @Get("/getIncompleteSchedule")
   @Render("user/getIncompleteSchedule")
   public async getIncompleteSchedule(@Session() session: Record<string, any>) {
     return {
-      courses: await this.userService.getIncompleteSchedule(
-        session.username,
-        session.password
-      )
+      courses: await this.userService.getIncompleteSchedule(session.cookieStr)
     };
   }
 
@@ -26,10 +18,7 @@ export class UserController {
   @Render("user/getIncompleteSchedule")
   public async getSchedule(@Session() session: Record<string, any>) {
     return {
-      courses: await this.userService.getSchedule(
-        session.username,
-        session.password
-      )
+      courses: await this.userService.getSchedule(session.cookieStr)
     };
   }
 
@@ -37,10 +26,7 @@ export class UserController {
   @Render("user/getIncompleteReport")
   public async getIncompleteReport(@Session() session: Record<string, any>) {
     return {
-      courses: await this.userService.getIncompleteReport(
-        session.username,
-        session.password
-      )
+      courses: await this.userService.getIncompleteReport(session.cookieStr)
     };
   }
 
@@ -54,10 +40,7 @@ export class UserController {
   @Render("user/getCalender")
   public async getCalender(@Session() session: Record<string, any>) {
     return {
-      calenders: await this.userService.getCalender(
-        session.username,
-        session.password
-      )
+      calenders: await this.userService.getCalender(session.cookieStr)
     };
   }
 
@@ -65,10 +48,7 @@ export class UserController {
   @Render("user/getReportCalender")
   public async getReportCalender(@Session() session: Record<string, any>) {
     return {
-      calenders: await this.userService.getReportCalender(
-        session.username,
-        session.password
-      )
+      calenders: await this.userService.getReportCalender(session.cookieStr)
     };
   }
 }

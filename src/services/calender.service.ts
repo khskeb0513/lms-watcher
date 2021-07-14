@@ -6,13 +6,10 @@ import * as moment from "moment";
 
 @Injectable()
 export class CalenderService {
-  constructor(private readonly sessionService: SessionService) {}
+  constructor(private readonly sessionService: SessionService) {
+  }
 
-  public async getCalender(username: string, password: string) {
-    const cookie = await this.sessionService.getLoginSession(
-      username,
-      password
-    );
+  public async getCalender(cookie: string) {
     const body = (
       await got.post(
         "https://lms.pknu.ac.kr/ilos/main/main_schedule_view.acl",
@@ -39,11 +36,7 @@ export class CalenderService {
       .sort((a, b) => a.startDate.valueOf() - b.startDate.valueOf());
   }
 
-  public async getReportCalender(username: string, password: string) {
-    const cookie = await this.sessionService.getLoginSession(
-      username,
-      password
-    );
+  public async getReportCalender(cookie: string) {
     const body = (
       await got.post(
         "https://lms.pknu.ac.kr/ilos/main/main_schedule_view.acl",

@@ -8,6 +8,7 @@ import * as moment from "moment";
 import got from "got";
 import UserDatabase from "../domain/UserDatabase";
 import HisDatabase from "../domain/HisDatabase";
+import * as cheerio from "cheerio";
 
 @Injectable()
 export class UserService {
@@ -22,12 +23,19 @@ export class UserService {
   ) {
   }
 
-  public async fulfillSchedule(username: string, password: string) {
-    const response = await this.getIncompleteHisCode(username, password);
-    const cookie = await this.sessionService.getLoginSession(
-      username,
-      password
-    );
+  public async getUsername(cookie: string) {
+    const response = await got.get("https://lms.pknu.ac.kr/ilos/mp/myinfo_form.acl", {
+      headers: {
+        cookie
+      }
+    });
+    const $ = cheerio.load(response.body);
+    const str = $("#uploadForm > div:nth-child(5) > table > tbody > tr:nth-child(1) > td:nth-child(2)").html();
+    return str.slice(str.indexOf("(") + 1, str.length - 1);
+  }
+
+  public async fulfillSchedule(username: string, cookie: string) {
+    const response = await this.getIncompleteHisCode(username, cookie);
     await got.post("https://lms.pknu.ac.kr/ilos/st/course/eclass_room2.acl", {
       headers: { cookie },
       searchParams: {
@@ -63,14 +71,14 @@ export class UserService {
     return await this.hisDatabase.getAllHisCode();
   }
 
-  public async getIncompleteHisCode(username: string, password: string) {
-    return await Promise.all((await this.getIncompleteSchedule(username, password)).filter(v => {
+  public async getIncompleteHisCode(username: string, cookie: string) {
+    return await Promise.all((await this.getIncompleteSchedule(cookie)).filter(v => {
       return v.incomplete.length !== 0;
     }).map(async v => {
       return await Promise.all(v.incomplete.map(async item => {
         return {
           ...item,
-          his: await this.scheduleService.getHisCode(item.item, item.seq, item.kjKey, username, username, password)
+          his: await this.scheduleService.getHisCode(item.item, item.seq, item.kjKey, username, cookie)
         };
       }));
     }));
@@ -80,56 +88,52 @@ export class UserService {
     return this.userDatabase.getUsers();
   }
 
-  public async getIncompleteSchedule(username: string, password: string) {
-    const courseArr = await this.courseService.getList(username, password);
+  public async getIncompleteSchedule(cookie: string) {
+    const courseArr = await this.courseService.getList(cookie);
     return Promise.all(
       courseArr.map(async (v) => {
         return {
           ...v,
           incomplete: await this.scheduleService.getByCourseIdExceptComplete(
             v.id,
-            username,
-            password
+            cookie
           )
         };
       })
     );
   }
 
-  public async getSchedule(username: string, password: string) {
-    const courseArr = await this.courseService.getList(username, password);
+  public async getSchedule(cookie: string) {
+    const courseArr = await this.courseService.getList(cookie);
     return Promise.all(
       courseArr.map(async (v) => {
         return {
           ...v,
           incomplete: await this.scheduleService.getByCourseId(
-            v.id,
-            username,
-            password
+            v.id, cookie
           )
         };
       })
     );
   }
 
-  public async getIncompleteReport(username: string, password: string) {
-    const courseArr = await this.courseService.getList(username, password);
+  public async getIncompleteReport(cookie: string) {
+    const courseArr = await this.courseService.getList(cookie);
     return Promise.all(
       courseArr.map(async (v) => {
         return {
           ...v,
           incomplete: await this.reportService.getByCourseIdExceptComplete(
             v.id,
-            username,
-            password
+            cookie
           )
         };
       })
     );
   }
 
-  public async getCalender(username: string, password: string) {
-    return (await this.calenderService.getCalender(username, password))
+  public async getCalender(cookie: string) {
+    return (await this.calenderService.getCalender(cookie))
       .filter((v) => new Date().valueOf() < v.startDate.valueOf())
       .map((v) => {
         return {
@@ -140,8 +144,8 @@ export class UserService {
       });
   }
 
-  public async getReportCalender(username: string, password: string) {
-    return (await this.calenderService.getReportCalender(username, password))
+  public async getReportCalender(cookie: string) {
+    return (await this.calenderService.getReportCalender(cookie))
       .filter((v) => v.endDate.valueOf() > new Date().valueOf())
       .map((v) => {
         return {
@@ -152,17 +156,5 @@ export class UserService {
             : null
         };
       });
-  }
-
-  public async isUser(username: string, password: string) {
-    const body = (
-      await got.post("https://lms.pknu.ac.kr/ilos/lo/login.acl", {
-        form: {
-          usr_id: username,
-          usr_pwd: password
-        }
-      })
-    ).body;
-    return !body.includes("일치하지");
   }
 }

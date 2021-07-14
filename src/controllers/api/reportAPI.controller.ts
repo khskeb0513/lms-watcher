@@ -12,8 +12,7 @@ export class ReportAPIController {
   ) {
     return this.reportService.getByCourseId(
       kjKey,
-      session.username,
-      session.password
+      session.cookieStr
     );
   }
 
@@ -24,8 +23,7 @@ export class ReportAPIController {
   ) {
     return this.reportService.getByCourseIdExceptComplete(
       kjKey,
-      session.username,
-      session.password
+      session.cookieStr
     );
   }
 }

@@ -3,18 +3,16 @@ import { CalenderService } from "../../services/calender.service";
 
 @Controller("api/calender")
 export class CalenderAPIController {
-  constructor(private readonly calenderService: CalenderService) {}
+  constructor(private readonly calenderService: CalenderService) {
+  }
 
   @Get("/getCalender")
   public async getCalender(@Session() session: Record<string, any>) {
-    return this.calenderService.getCalender(session.username, session.password);
+    return this.calenderService.getCalender(session.cookieStr);
   }
 
   @Get("/getReportCalender")
   public async getReportCalender(@Session() session: Record<string, any>) {
-    return this.calenderService.getReportCalender(
-      session.username,
-      session.password
-    );
+    return this.calenderService.getReportCalender(session.cookieStr);
   }
 }

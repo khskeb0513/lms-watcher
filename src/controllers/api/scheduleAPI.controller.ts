@@ -17,8 +17,7 @@ export class ScheduleAPIController {
   ) {
     return this.scheduleService.getByCourseId(
       id,
-      session.username,
-      session.password
+      session.cookieStr
     );
   }
 
@@ -29,8 +28,7 @@ export class ScheduleAPIController {
   ) {
     return this.scheduleService.getByCourseIdExceptComplete(
       id,
-      session.username,
-      session.password
+      session.cookieStr
     );
   }
 
@@ -47,8 +45,7 @@ export class ScheduleAPIController {
       seq,
       kjKey,
       ud,
-      session.username,
-      session.password
+      session.cookieStr
     );
   }
 }

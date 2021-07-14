@@ -8,7 +8,7 @@ enum User {
 
 export default class UserDatabase {
 
-  public async init() {
+  private static async init() {
     if (!await userDatabase.exists(User.listOfUsername)) {
       await userDatabase.put(User.listOfUsername, []);
     }
@@ -29,7 +29,7 @@ export default class UserDatabase {
 
   public async setUser(username: string, password: string): Promise<boolean> {
     await userDatabase.put(username, password);
-    await this.init();
+    await UserDatabase.init();
     await this.loadUsernameToList(username);
     return true;
   }

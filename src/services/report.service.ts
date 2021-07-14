@@ -5,13 +5,10 @@ import * as cheerio from "cheerio";
 
 @Injectable()
 export class ReportService {
-  constructor(private readonly sessionService: SessionService) {}
+  constructor(private readonly sessionService: SessionService) {
+  }
 
-  public async getByCourseId(id: string, username: string, password: string) {
-    const cookie = await this.sessionService.getLoginSession(
-      username,
-      password
-    );
+  public async getByCourseId(id: string, cookie: string) {
     await this.sessionService.moveKj(cookie, id);
     const body = (
       await got.get("https://lms.pknu.ac.kr/ilos/st/course/report_list.acl", {
@@ -46,10 +43,9 @@ export class ReportService {
 
   public async getByCourseIdExceptComplete(
     id: string,
-    username: string,
-    password: string
+    cookie: string
   ) {
-    return (await this.getByCourseId(id, username, password)).filter((v) => {
+    return (await this.getByCourseId(id, cookie)).filter((v) => {
       return v.submitStatus.includes("미제출");
     });
   }

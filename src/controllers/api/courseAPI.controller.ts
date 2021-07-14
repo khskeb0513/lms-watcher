@@ -7,6 +7,6 @@ export class CourseAPIController {
 
   @Get("/getList")
   public getList(@Session() session: Record<string, any>) {
-    return this.courseService.getList(session.username, session.password);
+    return this.courseService.getList(session.cookieStr);
   }
 }
