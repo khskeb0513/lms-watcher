@@ -1,12 +1,10 @@
 import { Controller, Get, Query, Session } from "@nestjs/common";
 import { ScheduleService } from "../../services/schedule.service";
-import { FulfillService } from "../../services/fulfill.service";
 
 @Controller("api/schedule")
 export class ScheduleAPIController {
   constructor(
-    private readonly scheduleService: ScheduleService,
-    private readonly fulfillService: FulfillService
+    private readonly scheduleService: ScheduleService
   ) {
   }
 

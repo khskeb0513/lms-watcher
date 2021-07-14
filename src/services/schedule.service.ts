@@ -4,15 +4,13 @@ import * as cheerio from "cheerio";
 import { SessionService } from "./session.service";
 import { CommonService } from "./common.service";
 import { CourseService } from "./course.service";
-import HisDatabase from "../domain/HisDatabase";
 
 @Injectable()
 export class ScheduleService {
   constructor(
     private readonly sessionService: SessionService,
     private readonly commonService: CommonService,
-    private readonly courseService: CourseService,
-    private readonly hisDatabase: HisDatabase
+    private readonly courseService: CourseService
   ) {
   }
 
