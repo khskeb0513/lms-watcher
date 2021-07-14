@@ -20,7 +20,7 @@ export class SessionService {
     };
   }
 
-  public async isSessionAvailable(cookie: string) {
+  public async isSessionValid(cookie: string) {
     const request = await got.get("https://lms.pknu.ac.kr/ilos/mp/user_image_view.acl", {
       headers: {
         cookie

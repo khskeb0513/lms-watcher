@@ -35,11 +35,11 @@ export class UserAPIController {
     return { isUser: isUser.isUser };
   }
 
-  @Get("/isSessionAvailable")
-  public async isSessionAvailable(
+  @Get("/isSessionValid")
+  public async isSessionValid(
     @Session() session: Record<string, any>
   ) {
-    const isSessionAvailable = await this.sessionService.isSessionAvailable(session.cookieStr);
+    const isSessionAvailable = await this.sessionService.isSessionValid(session.cookieStr);
     return { isSessionAvailable };
   }
 
@@ -48,7 +48,7 @@ export class UserAPIController {
     @Session() session: Record<string, any>
   ) {
     const cookie = session.cookieStr;
-    const status = await this.sessionService.isSessionAvailable(cookie);
+    const status = await this.sessionService.isSessionValid(cookie);
     return { cookie, status };
   }
 
@@ -57,7 +57,7 @@ export class UserAPIController {
     @Body("cookieStr") cookieStr: string,
     @Session() session: Record<string, any>
   ) {
-    if (await this.sessionService.isSessionAvailable(cookieStr)) {
+    if (await this.sessionService.isSessionValid(cookieStr)) {
       session.cookieStr = cookieStr;
       session.username = await this.userService.getUsername(cookieStr);
       return {
