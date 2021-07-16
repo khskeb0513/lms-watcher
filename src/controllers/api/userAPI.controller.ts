@@ -52,6 +52,25 @@ export class UserAPIController {
     return { cookie, status };
   }
 
+  @Get("/renewSession")
+  public async renewSession(
+    @Session() session: Record<string, any>
+  ) {
+    const newCookie = await this.sessionService.isUser(
+      session.username, session.password
+    );
+    if (newCookie.isUser) {
+      session.cookieStr = newCookie.cookie;
+      return {
+        set: true
+      };
+    } else {
+      return {
+        set: false
+      };
+    }
+  }
+
   @Post("/setSessionValue")
   public async setSessionValue(
     @Body("cookieStr") cookieStr: string,
@@ -70,6 +89,7 @@ export class UserAPIController {
       };
     }
   }
+
   @Get("/getSchoolCalender")
   public async getSchoolCalender(
     @Session() session: Record<string, any>

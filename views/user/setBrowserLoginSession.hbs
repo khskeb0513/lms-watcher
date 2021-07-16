@@ -43,7 +43,27 @@
 <p>
   <button onclick="checkCookieInformation()">submit</button>
 </p>
+<h3>
+  renew Session
+</h3>
+<p>
+  <button onclick="renewSession()">renew</button>
+</p>
 <script>
+  const renewSession = () => {
+    fetch("/api/user/renewSession", {
+      method: "get"
+    }).then(async r => {
+      const body = await r.json()
+      if (body['set']) {
+        alert('session renewed')
+        window.location.href = '/'
+      } else {
+        alert('invalid user data, re-login required.')
+      }
+    });
+  }
+
   const checkCookieInformation = () => {
     const cookieStr = document.querySelector("input#cookieStr").value;
     fetch("/api/user/setSessionValue", {
