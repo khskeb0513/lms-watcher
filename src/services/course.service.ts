@@ -5,8 +5,6 @@ import { SessionService } from "./session.service";
 
 @Injectable()
 export class CourseService {
-  constructor(private readonly sessionService: SessionService) {
-  }
 
   public async getList(cookie: string) {
     const response = await got.post(
