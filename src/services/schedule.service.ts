@@ -3,7 +3,6 @@ import got from "got";
 import * as cheerio from "cheerio";
 import { SessionService } from "./session.service";
 import { CommonService } from "./common.service";
-import { CourseService } from "./course.service";
 
 @Injectable()
 export class ScheduleService {
@@ -14,6 +13,7 @@ export class ScheduleService {
   }
 
   public async getByCourseId(id: string, cookie: string) {
+    await this.sessionService.moveKj(cookie, id);
     await got.post("https://lms.pknu.ac.kr/ilos/st/course/eclass_room2.acl", {
       headers: { cookie },
       searchParams: {
