@@ -9,8 +9,7 @@ import { CourseService } from "./course.service";
 export class ScheduleService {
   constructor(
     private readonly sessionService: SessionService,
-    private readonly commonService: CommonService,
-    private readonly courseService: CourseService
+    private readonly commonService: CommonService
   ) {
   }
 
