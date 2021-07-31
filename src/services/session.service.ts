@@ -31,7 +31,7 @@ export class SessionService {
   }
 
   public async moveKj(cookie: string, kjKey: string) {
-    await got.post("https://lms.pknu.ac.kr/ilos/st/course/eclass_room2.acl", {
+    const request = await got.post("https://lms.pknu.ac.kr/ilos/st/course/eclass_room2.acl", {
       headers: { cookie },
       searchParams: {
         KJKEY: kjKey,
@@ -40,5 +40,6 @@ export class SessionService {
         encoding: "utf-8"
       }
     });
+    return request.statusCode
   }
 }

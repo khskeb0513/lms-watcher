@@ -22,9 +22,8 @@ export class CourseService {
       .toArray()
       .map((v) => {
         const title = $(v).children().first().html();
-        return title !== "수강취소하기" ? {
-          title, id: $(v).attr()["onclick"].split('\'')[1]
-        } : null;
-      }).filter(v => !!v);
+        const id = $(v).attr()["onclick"].split('\'')[1]
+        return {title, id}
+      }).filter(v => v.title !== '수강취소하기');
   }
 }

@@ -27,22 +27,22 @@ export class UserService {
     });
     const $ = cheerio.load(response.body);
     const str = $("#uploadForm > div:nth-child(5) > table > tbody > tr:nth-child(1) > td:nth-child(2)").html();
-    return str.slice(str.indexOf("(") + 1, str.length - 1);
+    return str ? str.slice(str.indexOf("(") + 1, str.length - 1) : null;
   }
 
   public async getIncompleteSchedule(cookie: string) {
     const courseArr = await this.courseService.getList(cookie);
-    return Promise.all(
-      courseArr.map(async (v) => {
-        return {
-          ...v,
-          incomplete: await this.scheduleService.getByCourseIdExceptComplete(
-            v.id,
-            cookie
-          )
-        };
-      })
-    );
+    const data = [];
+    for (let i = 0; i < courseArr.length; i++) {
+      data.push({
+        ...courseArr[i],
+        incomplete: await this.scheduleService.getByCourseIdExceptComplete(
+          courseArr[i].id,
+          cookie
+        )
+      });
+    }
+    return data;
   }
 
   public async getSchedule(cookie: string) {

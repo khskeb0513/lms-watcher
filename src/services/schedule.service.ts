@@ -13,22 +13,12 @@ export class ScheduleService {
   }
 
   public async getByCourseId(id: string, cookie: string) {
-    await this.sessionService.moveKj(cookie, id);
-    await got.post("https://lms.pknu.ac.kr/ilos/st/course/eclass_room2.acl", {
-      headers: { cookie },
-      searchParams: {
-        KJKEY: id,
-        returnData: "json",
-        returnURI: "%2Filos%2Fst%2Fcourse%2Fsubmain_form.acl",
-        encoding: "utf-8"
-      }
-    });
-    const body = await got.get(
+    const body = await this.sessionService.moveKj(cookie, id) ? await got.get(
       "https://lms.pknu.ac.kr/ilos/st/course/online_list.acl",
       {
         headers: { cookie }
       }
-    );
+    ) : null;
     const $ = cheerio.load(body.body);
     const percentArr = $("div#per_text")
       .toArray()
@@ -85,8 +75,7 @@ export class ScheduleService {
     id: string,
     cookie: string
   ) {
-    const scheduleArr = await this.getByCourseId(id, cookie);
-    return scheduleArr.filter((v) => v.percent !== "100%");
+    return (await this.getByCourseId(id, cookie)).filter((v) => v.percent !== "100%");
   }
 
   public async getHisCode(
