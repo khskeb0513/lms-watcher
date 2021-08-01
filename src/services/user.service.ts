@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { CourseService } from "./course.service";
+import { EClassService } from "./eClass.service";
 import { ScheduleService } from "./schedule.service";
 import { ReportService } from "./report.service";
 import { SessionService } from "./session.service";
@@ -7,16 +7,32 @@ import { CalenderService } from "./calender.service";
 import * as moment from "moment";
 import got from "got";
 import * as cheerio from "cheerio";
+import { DatabaseService } from "./database.service";
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly sessionService: SessionService,
-    private readonly courseService: CourseService,
-    private readonly scheduleService: ScheduleService,
+    private readonly eClassService: EClassService,
     private readonly reportService: ReportService,
-    private readonly calenderService: CalenderService
+    private readonly calenderService: CalenderService,
+    private readonly scheduleService: ScheduleService,
+    private readonly databaseService: DatabaseService
   ) {
+  }
+
+  public async requestHisStatus(item: number, seq: number, kjKey: string, cookie: string) {
+    const his = await this.databaseService.getHisListByUsernameItem(await this.getUsername(cookie), item);
+    return {
+      item,
+      seq,
+      kjKey,
+      his: {
+        hisCode: his.hisCode,
+        timestamp: his.timestamp,
+        localeTimestamp: new Date(his.timestamp).toLocaleTimeString()
+      }
+    };
   }
 
   public async getUsername(cookie: string) {
@@ -31,12 +47,12 @@ export class UserService {
   }
 
   public async getIncompleteSchedule(cookie: string) {
-    const courseArr = await this.courseService.getList(cookie);
+    const courseArr = await this.eClassService.getList(cookie);
     const data = [];
     for (let i = 0; i < courseArr.length; i++) {
       data.push({
         ...courseArr[i],
-        incomplete: await this.scheduleService.getByCourseIdExceptComplete(
+        incomplete: await this.scheduleService.getByEClassIdExceptComplete(
           courseArr[i].id,
           cookie
         )
@@ -46,12 +62,12 @@ export class UserService {
   }
 
   public async getSchedule(cookie: string) {
-    const courseArr = await this.courseService.getList(cookie);
+    const courseArr = await this.eClassService.getList(cookie);
     return Promise.all(
       courseArr.map(async (v) => {
         return {
           ...v,
-          incomplete: await this.scheduleService.getByCourseId(
+          incomplete: await this.scheduleService.getByEClassId(
             v.id, cookie
           )
         };
@@ -60,7 +76,7 @@ export class UserService {
   }
 
   public async getIncompleteReport(cookie: string) {
-    const courseArr = await this.courseService.getList(cookie);
+    const courseArr = await this.eClassService.getList(cookie);
     return Promise.all(
       courseArr.map(async (v) => {
         return {

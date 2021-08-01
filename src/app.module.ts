@@ -1,24 +1,25 @@
 import { Module } from "@nestjs/common";
-import { CourseService } from "./services/course.service";
-import { CourseAPIController } from "./controllers/api/courseAPI.controller";
-import { ScheduleService } from "./services/schedule.service";
+import { EClassAPIController } from "./controllers/api/eClassAPIController";
 import { ScheduleAPIController } from "./controllers/api/scheduleAPI.controller";
-import { SessionService } from "./services/session.service";
-import { UserService } from "./services/user.service";
-import { UserController } from "./controllers/user.controller";
-import { CommonService } from "./services/common.service";
 import { UserAPIController } from "./controllers/api/userAPI.controller";
-import { ReportService } from "./services/report.service";
 import { ReportAPIController } from "./controllers/api/reportAPI.controller";
-import { CalenderService } from "./services/calender.service";
+import { UserController } from "./controllers/user.controller";
 import { CalenderAPIController } from "./controllers/api/calenderAPI.controller";
 import { IndexController } from "./controllers/index.controller";
+import { EClassService } from "./services/eClass.service";
+import { ScheduleService } from "./services/schedule.service";
+import { SessionService } from "./services/session.service";
+import { DatabaseService } from "./services/database.service";
+import { UserService } from "./services/user.service";
+import { CommonService } from "./services/common.service";
+import { ReportService } from "./services/report.service";
+import { CalenderService } from "./services/calender.service";
+
 
 @Module({
-  imports: [
-  ],
+  imports: [],
   controllers: [
-    CourseAPIController,
+    EClassAPIController,
     ScheduleAPIController,
     UserAPIController,
     ReportAPIController,
@@ -27,13 +28,15 @@ import { IndexController } from "./controllers/index.controller";
     IndexController
   ],
   providers: [
-    CourseService,
+    EClassService,
     ScheduleService,
     SessionService,
+    DatabaseService,
     UserService,
     CommonService,
     ReportService,
     CalenderService
   ]
 })
-export class AppModule {}
+export class AppModule {
+}

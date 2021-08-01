@@ -1,15 +1,13 @@
 import { Body, Controller, Get, Post, Session } from "@nestjs/common";
 import { SessionService } from "../../services/session.service";
 import { UserService } from "../../services/user.service";
-import { ScheduleService } from "../../services/schedule.service";
 import isUserResponseDto from "../../domain/dto/isUserResponseDto";
 
 @Controller("api/user")
 export class UserAPIController {
   constructor(
     private readonly sessionService: SessionService,
-    private readonly userService: UserService,
-    private readonly scheduleService: ScheduleService
+    private readonly userService: UserService
   ) {
   }
 

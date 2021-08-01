@@ -1,9 +1,22 @@
-import { Controller, Get, Render, Session } from "@nestjs/common";
+import { Controller, Get, Query, Render, Session } from "@nestjs/common";
 import { UserService } from "../services/user.service";
 
 @Controller("user")
 export class UserController {
-  constructor(private readonly userService: UserService) {
+  constructor(
+    private readonly userService: UserService
+  ) {
+  }
+
+  @Get("/requestHisStatus")
+  @Render("user/requestHisStatus")
+  public async requestHisStatus(
+    @Query("item") item: number,
+    @Query("seq") seq: number,
+    @Query("kjKey") kjKey: string,
+    @Session() session: Record<string, any>
+  ) {
+    return this.userService.requestHisStatus(item, seq, kjKey, session.cookieStr);
   }
 
   @Get("/getIncompleteSchedule")

@@ -1,10 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import got from "got";
 import * as cheerio from "cheerio";
-import { SessionService } from "./session.service";
 
 @Injectable()
-export class CourseService {
+export class EClassService {
 
   public async getList(cookie: string) {
     const response = await got.post(

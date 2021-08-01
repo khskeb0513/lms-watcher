@@ -1,10 +1,12 @@
 import { Controller, Get, Query, Session } from "@nestjs/common";
 import { ScheduleService } from "../../services/schedule.service";
+import { UserService } from "../../services/user.service";
 
 @Controller("api/schedule")
 export class ScheduleAPIController {
   constructor(
-    private readonly scheduleService: ScheduleService
+    private readonly scheduleService: ScheduleService,
+    private readonly userService: UserService
   ) {
   }
 
@@ -13,7 +15,7 @@ export class ScheduleAPIController {
     @Query("id") id: string,
     @Session() session: Record<string, any>
   ) {
-    return this.scheduleService.getByCourseId(
+    return this.scheduleService.getByEClassId(
       id,
       session.cookieStr
     );
@@ -24,22 +26,33 @@ export class ScheduleAPIController {
     @Query("id") id: string,
     @Session() session: Record<string, any>
   ) {
-    return this.scheduleService.getByCourseIdExceptComplete(
+    return this.scheduleService.getByEClassIdExceptComplete(
       id,
       session.cookieStr
     );
   }
 
-  @Get("/getHisCode")
-  public getHisCode(
-    @Query("id") id: number,
+  @Get("/requestHisStatus")
+  public async requestHisStatus(
+    @Query("item") item: number,
     @Query("seq") seq: number,
     @Query("kjKey") kjKey: string,
-    @Query("ud") ud: number,
+    @Query("his") his: number,
     @Session() session: Record<string, any>
   ) {
+    return this.scheduleService.requestHisStatus(seq, item, his, kjKey, session.cookieStr);
+  }
+
+  @Get("/getHisCode")
+  public async getHisCode(
+    @Query("item") item: number,
+    @Query("seq") seq: number,
+    @Query("kjKey") kjKey: string,
+    @Session() session: Record<string, any>
+  ) {
+    const ud = await this.userService.getUsername(session.cookieStr);
     return this.scheduleService.getHisCode(
-      id,
+      item,
       seq,
       kjKey,
       ud,

@@ -3,16 +3,29 @@ import got from "got";
 import * as cheerio from "cheerio";
 import { SessionService } from "./session.service";
 import { CommonService } from "./common.service";
+import { DatabaseService } from "./database.service";
 
 @Injectable()
 export class ScheduleService {
   constructor(
     private readonly sessionService: SessionService,
-    private readonly commonService: CommonService
+    private readonly commonService: CommonService,
+    private readonly databaseService: DatabaseService
   ) {
   }
 
-  public async getByCourseId(id: string, cookie: string) {
+  private async getUsername(cookie: string) {
+    const response = await got.get("https://lms.pknu.ac.kr/ilos/mp/myinfo_form.acl", {
+      headers: {
+        cookie
+      }
+    });
+    const $ = cheerio.load(response.body);
+    const str = $("#uploadForm > div:nth-child(5) > table > tbody > tr:nth-child(1) > td:nth-child(2)").html();
+    return str ? str.slice(str.indexOf("(") + 1, str.length - 1) : null;
+  }
+
+  public async getByEClassId(id: string, cookie: string) {
     const body = await this.sessionService.moveKj(cookie, id) ? await got.get(
       "https://lms.pknu.ac.kr/ilos/st/course/online_list.acl",
       {
@@ -71,11 +84,52 @@ export class ScheduleService {
     return scheduleArr;
   }
 
-  public async getByCourseIdExceptComplete(
+  public async getByEClassIdExceptComplete(
     id: string,
     cookie: string
   ) {
-    return (await this.getByCourseId(id, cookie)).filter((v) => v.percent !== "100%");
+    return (await this.getByEClassId(id, cookie)).filter((v) => v.percent !== "100%");
+  }
+
+  public async requestHisStatus(
+    seq: number,
+    item: number,
+    his: number,
+    kjKey: string,
+    cookie: string
+  ) {
+    if (await this.sessionService.moveKj(cookie, kjKey)) {
+      const ud = await this.getUsername(cookie);
+      await got.post("https://lms.pknu.ac.kr/ilos/st/course/online_view_at.acl", {
+        headers: { cookie },
+        form: {
+          lecture_weeks: seq,
+          item_id: item,
+          link_seq: seq,
+          his_no: his,
+          ky: kjKey,
+          ud,
+          trigger_yn: "N",
+          returnData: "json",
+          encoding: "utf-8"
+        }
+      });
+      const response = await got.post("https://lms.pknu.ac.kr/ilos/st/course/online_view_status.acl", {
+        form: {
+          lecture_weeks: seq,
+          item_id: item,
+          link_seq: seq,
+          his_no: his,
+          ky: kjKey,
+          ud,
+          returnData: "json",
+          encoding: "utf-8"
+        },
+        headers: { cookie }
+      });
+      return response.statusCode;
+    }
+
   }
 
   public async getHisCode(
@@ -85,32 +139,29 @@ export class ScheduleService {
     ud,
     cookie: string
   ) {
-    await got.post("https://lms.pknu.ac.kr/ilos/st/course/eclass_room2.acl", {
-      headers: { cookie },
-      searchParams: {
-        KJKEY: kjKey,
-        returnData: "json",
-        returnURI: "%2Filos%2Fst%2Fcourse%2Fsubmain_form.acl",
-        encoding: "utf-8"
-      }
-    });
-    const body = await got.post(
-      "https://lms.pknu.ac.kr/ilos/st/course/online_view_hisno.acl",
-      {
-        headers: { cookie },
-        form: {
-          lecture_weeks: seq,
-          item_id: itemId,
-          link_seq: seq,
-          kjkey: kjKey,
-          _KJKEY: kjKey,
-          ky: kjKey,
-          ud: ud,
-          returnData: "json",
-          encoding: "utf-8"
+    const dbResponse = await this.databaseService.getHisListByUsernameItem(ud, itemId);
+    if (dbResponse) {
+      return dbResponse;
+    } else {
+      const body = await this.sessionService.moveKj(cookie, kjKey) ? await got.post(
+        "https://lms.pknu.ac.kr/ilos/st/course/online_view_hisno.acl",
+        {
+          headers: { cookie },
+          form: {
+            lecture_weeks: seq,
+            item_id: itemId,
+            link_seq: seq,
+            kjkey: kjKey,
+            _KJKEY: kjKey,
+            ky: kjKey,
+            ud,
+            returnData: "json",
+            encoding: "utf-8"
+          }
         }
-      }
-    );
-    return parseInt(JSON.parse(body.body)["his_no"]);
+      ) : null;
+      const his = parseInt(JSON.parse(body.body)["his_no"]);
+      return this.databaseService.setHis(his, ud, itemId);
+    }
   }
 }
