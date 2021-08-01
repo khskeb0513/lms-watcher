@@ -100,6 +100,18 @@ export class ScheduleService {
   ) {
     if (await this.sessionService.moveKj(cookie, kjKey)) {
       const ud = await this.getUsername(cookie);
+      await got.post(
+        "https://lms.pknu.ac.kr/ilos/st/course/online_list.acl",
+        {
+          headers: { cookie },
+          form: {
+            ky: kjKey,
+            ud,
+            WEEK_NO: seq,
+            encoding: "utf-8"
+          }
+        }
+      );
       await got.post("https://lms.pknu.ac.kr/ilos/st/course/online_view_at.acl", {
         headers: { cookie },
         form: {
