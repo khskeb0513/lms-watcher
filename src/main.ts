@@ -12,7 +12,7 @@ async function bootstrap() {
   app.setViewEngine("hbs");
   app.use(
     session({
-      secret: process.env.SESSION_KEY,
+      secret: '409c0c4nq$#%$^W%#TVY$',
       resave: false,
       saveUninitialized: true
     })
