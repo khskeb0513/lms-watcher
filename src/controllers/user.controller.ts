@@ -28,7 +28,7 @@ export class UserController {
   }
 
   @Get("/getSchedule")
-  @Render("user/getIncompleteSchedule")
+  @Render("user/getSchedule")
   public async getSchedule(@Session() session: Record<string, any>) {
     return {
       courses: await this.userService.getSchedule(session.cookieStr)

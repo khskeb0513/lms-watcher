@@ -12,7 +12,7 @@ export class EClassService {
         headers: { cookie },
         searchParams: {
           YEAR: 2021,
-          TERM: 2
+          TERM: 1
         }
       }
     );

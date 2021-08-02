@@ -9,7 +9,7 @@
 </head>
 <body>
 <h1>
-  /user/getIncompleteSchedule
+  /user/getSchedule
 </h1>
 <p>
   ==================================================
@@ -45,6 +45,9 @@
         <a href="#his-{{item}}" onclick="getHis('{{item}}', '{{seq}}', '{{kjKey}}')">hisCode:</a>
         <span id="his-{{item}}"></span>
         <br>
+        <a href="#cid-{{item}}" onclick="getCid('{{item}}', '{{seq}}', '{{kjKey}}', '{{name}}')">contentId:</a>
+        <span id="cid-{{item}}"></span>
+        <br>
         ==========
       {{/each}}
       <br>
@@ -60,6 +63,15 @@
       const text = await r.json();
       document.querySelector(`#his-${item}`).innerHTML =
         `<a href="/user/requestHisStatus?item=${item}&seq=${seq}&kjKey=${kjKey}">${text["hisCode"]} (timestamp: ${text["timestamp"]})</a>`;
+    }).catch(async e => {
+      alert(e);
+    });
+  };
+  const getCid = (item, seq, kjKey, name) => {
+    fetch(`/api/schedule/getVideo?item=${item}&seq=${seq}&kjKey=${kjKey}`).then(async r => {
+      const text = await r.json();
+      document.querySelector(`#cid-${item}`).innerHTML =
+        `<a href="https://pknu.commonscdn.com/contents5/pknu100001/${text["cid"]}/contents/media_files/mobile/ssmovie.mp4" download="${kjKey}-${name}.mp4">${text["cid"]} (contentId: ${text["contentId"]})</a>`;
     }).catch(async e => {
       alert(e);
     });

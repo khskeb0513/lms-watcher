@@ -63,16 +63,17 @@ export class UserService {
 
   public async getSchedule(cookie: string) {
     const courseArr = await this.eClassService.getList(cookie);
-    return Promise.all(
-      courseArr.map(async (v) => {
-        return {
-          ...v,
-          incomplete: await this.scheduleService.getByEClassId(
-            v.id, cookie
-          )
-        };
-      })
-    );
+    const data = [];
+    for (let i = 0; i < courseArr.length; i++) {
+      data.push({
+        ...courseArr[i],
+        incomplete: await this.scheduleService.getByEClassId(
+          courseArr[i].id,
+          cookie
+        )
+      });
+    }
+    return data;
   }
 
   public async getIncompleteReport(cookie: string) {

@@ -141,7 +141,44 @@ export class ScheduleService {
       });
       return response.statusCode;
     }
+  }
 
+  public async getVideo(
+    kjKey: string,
+    seq: number,
+    itemId: number,
+    cookie: string
+  ) {
+    const formAcl = await this.sessionService.moveKj(cookie, kjKey) ? await got.get(
+      "https://lms.pknu.ac.kr/ilos/st/course/online_view_form.acl", {
+        headers: { cookie },
+        searchParams: {
+          lecture_week: seq,
+          _KJKEY: kjKey
+        }
+      }
+    ) : null;
+    const contentId = formAcl.body.slice(
+      formAcl.body.indexOf("cv.load(\""),
+      formAcl.body.indexOf(");", formAcl.body.indexOf("cv.load(\""))
+    ).split("\", \"")[2];
+    const naviAcl = await got.post(
+      "https://lms.pknu.ac.kr/ilos/st/course/online_view_navi.acl", {
+        headers: { cookie },
+        form: {
+          content_id: contentId,
+          organization_id: 1,
+          lecture_weeks: seq,
+          navi: "current",
+          item_id: itemId,
+          ky: kjKey,
+          ud: await this.getUsername(cookie),
+          returnData: "json",
+          encoding: "utf-8"
+        }
+      }
+    );
+    return JSON.parse(naviAcl.body);
   }
 
   public async getHisCode(
