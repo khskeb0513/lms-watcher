@@ -60,6 +60,8 @@
       const text = await r.json();
       document.querySelector(`#his-${item}`).innerHTML =
         `<a href="/user/requestHisStatus?item=${item}&seq=${seq}&kjKey=${kjKey}">${text["hisCode"]} (timestamp: ${text["timestamp"]})</a>`;
+    }).catch(async e => {
+      alert(e);
     });
   };
 </script>

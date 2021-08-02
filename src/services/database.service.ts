@@ -17,16 +17,16 @@ export class DatabaseService {
     return response.val();
   }
 
-  public async setHis(his: number, username: string, item: number) {
-    if (his && username && item) {
+  public async setHis(hisCode: number, username: string, item: number) {
+    if (hisCode && username && item) {
       const timestamp = new Date().valueOf();
       const db = admin.database();
       const itemRequest = await db.ref(`/hisCode/${username}/${item}/hisCode`);
       const timestampRequest = await db.ref(`/hisCode/${username}/${item}/timestamp`);
-      itemRequest.set(his);
+      itemRequest.set(hisCode);
       timestampRequest.set(timestamp);
       return {
-        his, timestamp
+        hisCode, timestamp
       };
     }
   }
