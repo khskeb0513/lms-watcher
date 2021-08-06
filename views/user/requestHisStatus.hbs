@@ -66,7 +66,7 @@
   </li>
   <br>
   <li>
-    <button>
+    <button onclick="issueHis('{{item}}', '{{seq}}', '{{kjKey}}')">
       reissue his code
     </button>
   </li>
@@ -78,8 +78,8 @@
       document.querySelector("#status").innerHTML = await r.text();
     });
   };
-  const reissueHis = (item) => {
-    fetch(`/api/schedule/issueHis?item=${item}`).then(async r => {
+  const issueHis = (item, seq, kjKey) => {
+    fetch(`/api/schedule/issueHis?item=${item}&seq=${seq}&kjKey=${kjKey}`).then(async r => {
       if (r.ok) {
         window.location.reload();
       } else {
