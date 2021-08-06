@@ -30,7 +30,7 @@ export class UserService {
       his: {
         hisCode: his.hisCode,
         timestamp: his.timestamp,
-        localeTimestamp: new Date(his.timestamp).toLocaleTimeString()
+        localeTimestamp: new Date(his.timestamp).toLocaleString()
       }
     };
   }
