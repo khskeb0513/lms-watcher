@@ -46,6 +46,16 @@ export class ScheduleAPIController {
     };
   }
 
+  @Get("/issueHis")
+  public async issueHis(
+    @Query("item") item: number,
+    @Query("seq") seq: number,
+    @Query("kjKey") kjKey: string,
+    @Session() session: Record<string, any>
+  ) {
+    return this.scheduleService.issueHisCode(item, seq, kjKey, session.username, session.cookieStr);
+  }
+
   @Get("/requestHisStatus")
   public async requestHisStatus(
     @Query("item") item: number,

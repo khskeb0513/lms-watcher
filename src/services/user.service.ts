@@ -22,7 +22,7 @@ export class UserService {
   }
 
   public async requestHisStatus(item: number, seq: number, kjKey: string, cookie: string) {
-    const his = await this.databaseService.getHisListByUsernameItem(await this.getUsername(cookie), item);
+    const his = await this.databaseService.getHisByUsernameItem(await this.getUsername(cookie), item);
     return {
       item,
       seq,

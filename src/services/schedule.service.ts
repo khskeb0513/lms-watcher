@@ -181,6 +181,34 @@ export class ScheduleService {
     return JSON.parse(naviAcl.body);
   }
 
+  public async issueHisCode(
+    itemId,
+    seq,
+    kjKey,
+    ud,
+    cookie: string
+  ) {
+    const body = await this.sessionService.moveKj(cookie, kjKey) ? await got.post(
+      "https://lms.pknu.ac.kr/ilos/st/course/online_view_hisno.acl",
+      {
+        headers: { cookie },
+        form: {
+          lecture_weeks: seq,
+          item_id: itemId,
+          link_seq: seq,
+          kjkey: kjKey,
+          _KJKEY: kjKey,
+          ky: kjKey,
+          ud,
+          returnData: "json",
+          encoding: "utf-8"
+        }
+      }
+    ) : null;
+    const his = parseInt(JSON.parse(body.body)["his_no"]);
+    return this.databaseService.setHis(his, ud, itemId);
+  }
+
   public async getHisCode(
     itemId,
     seq,
@@ -188,29 +216,11 @@ export class ScheduleService {
     ud,
     cookie: string
   ) {
-    const dbResponse = await this.databaseService.getHisListByUsernameItem(ud, itemId);
+    const dbResponse = await this.databaseService.getHisByUsernameItem(ud, itemId);
     if (dbResponse) {
       return dbResponse;
     } else {
-      const body = await this.sessionService.moveKj(cookie, kjKey) ? await got.post(
-        "https://lms.pknu.ac.kr/ilos/st/course/online_view_hisno.acl",
-        {
-          headers: { cookie },
-          form: {
-            lecture_weeks: seq,
-            item_id: itemId,
-            link_seq: seq,
-            kjkey: kjKey,
-            _KJKEY: kjKey,
-            ky: kjKey,
-            ud,
-            returnData: "json",
-            encoding: "utf-8"
-          }
-        }
-      ) : null;
-      const his = parseInt(JSON.parse(body.body)["his_no"]);
-      return this.databaseService.setHis(his, ud, itemId);
+      return await this.issueHisCode(itemId, seq, kjKey, ud, cookie);
     }
   }
 }

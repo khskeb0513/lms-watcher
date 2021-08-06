@@ -11,6 +11,9 @@
 <h1>
   /user/requestHisStatus
 </h1>
+<h4>
+  주차 정보
+</h4>
 <ul>
   <li>
     item:
@@ -30,7 +33,11 @@
       {{kjKey}}
     </span>
   </li>
-  <hr>
+</ul>
+<h4>
+  his 정보
+</h4>
+<ul>
   <li>
     hisCode:
     <span id="hisCode">
@@ -46,18 +53,38 @@
     </span>
   </li>
 </ul>
-<button onclick="requestHis('{{item}}', '{{seq}}', '{{kjKey}}', '{{his/hisCode}}')">
-  send request
-</button>
-status:
-<span id="status">
-
-</span>
+<h4>
+  his 코드 제어
+</h4>
+<ul>
+  <li>
+    <button onclick="requestHis('{{item}}', '{{seq}}', '{{kjKey}}', '{{his/hisCode}}')">
+      send request
+    </button>
+    status:
+    <span id="status"></span>
+  </li>
+  <br>
+  <li>
+    <button>
+      reissue his code
+    </button>
+  </li>
+</ul>
 <script>
   document.querySelector("#locale").innerHTML = new Date({{his/timestamp}}).toLocaleString();
   const requestHis = (item, seq, kjKey, his) => {
     fetch(`/api/schedule/requestHisStatus?item${item}&seq=${seq}&kjKey=${kjKey}&his=${his}`).then(async r => {
       document.querySelector("#status").innerHTML = await r.text();
+    });
+  };
+  const reissueHis = (item) => {
+    fetch(`/api/schedule/issueHis?item=${item}`).then(async r => {
+      if (r.ok) {
+        window.location.reload();
+      } else {
+        alert(await r.text());
+      }
     });
   };
 </script>

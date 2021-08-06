@@ -11,7 +11,7 @@ export class DatabaseService {
     return response.val();
   }
 
-  public async getHisListByUsernameItem(username: string, item: number) {
+  public async getHisByUsernameItem(username: string, item: number) {
     const db = admin.database();
     const response = await db.ref(`/hisCode/${username}/${item}`).get();
     return response.val();
