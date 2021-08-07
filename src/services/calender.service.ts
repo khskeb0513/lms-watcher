@@ -24,10 +24,12 @@ export class CalenderService {
         const title = $(v).text().replace(/ /ig, "").replace(/\n/ig, "");
         const name = $(v).parent().children().last().children().first().children().first().text()
           .replace(/ /ig, "").replace(/\n/ig, "");
+        const searchDate = new Date(`${date.substr(0, 4)}-${date.substr(4, 2)}-${date.substr(6, 2)}`);
         if (dateStr.length === 23) {
           const [startDateStr, endDateStr] = dateStr.split(" ~ ");
           return {
             title,
+            searchDate,
             startDate: new Date(startDateStr),
             endDate: new Date(endDateStr),
             detail: {
@@ -36,14 +38,17 @@ export class CalenderService {
             }
           };
         } else {
-          const startDate = new Date(`${date.substr(0, 4)}-${date.substr(4, 2)}-${date.substr(6, 2)}`);
-          const status = $(v).parent().children().last().text();
+          const status = $(v).parent().children().last().children().first().text()
+            .replace(/ /ig, '').replace(/\n/ig, "");
+          const submitDate = $($(v).parent().children().last().children().first().children().toArray()[1]).text().replace("마감일 : ", "");
           return {
             title,
-            startDate,
-            endDate: startDate,
+            searchDate,
+            submitDate,
+            startDate: searchDate,
+            endDate: searchDate,
             detail: {
-              status: status.includes("제출") ? (status.includes("미체출") ? "미제출" : "제출") : null,
+              status: status.includes("상태") ? (status.includes("미제출") ? "미제출" : "제출") : null,
               name
             }
           };

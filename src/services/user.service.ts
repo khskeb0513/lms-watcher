@@ -4,7 +4,6 @@ import { ScheduleService } from "./schedule.service";
 import { ReportService } from "./report.service";
 import { SessionService } from "./session.service";
 import { CalenderService } from "./calender.service";
-import * as moment from "moment";
 import got from "got";
 import * as cheerio from "cheerio";
 import { DatabaseService } from "./database.service";
@@ -97,8 +96,9 @@ export class UserService {
       .map((v) => {
         return {
           ...v,
-          startDate: moment(v.startDate).format("YYYY-MM-DD"),
-          endDate: moment(v.endDate).format("YYYY-MM-DD")
+          startDate: v.startDate.toLocaleString(),
+          endDate: v.endDate.toLocaleString(),
+          searchDate: v.searchDate.toLocaleString()
         };
       });
   }
