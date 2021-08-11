@@ -5,24 +5,28 @@ import * as cheerio from "cheerio";
 @Injectable()
 export class EClassService {
 
-  public async getList(cookie: string) {
-    const response = await got.post(
-      "https://lms.pknu.ac.kr/ilos/mp/course_register_list.acl",
-      {
-        headers: { cookie },
-        searchParams: {
-          YEAR: 2021,
-          TERM: 2
-        }
+  public async getListByTerm(cookie: string, ...term: number[]) {
+    const uri = term.length === 0 ? "https://lms.pknu.ac.kr/ilos/mp/course_register_list_b.acl" : "https://lms.pknu.ac.kr/ilos/mp/course_register_list2.acl";
+    const response = await got.post(uri, {
+      headers: { cookie },
+      searchParams: {
+        YEAR: term[0],
+        TERM: term[1],
+        NON_TERM: "B"
       }
-    );
+    });
     const $ = cheerio.load(response.body);
-    return $("a.site-link")
+    return $("div.content-container")
       .toArray()
       .map((v) => {
-        const title = $(v).children().first().html();
-        const id = $(v).attr()["onclick"].split('\'')[1]
-        return {title, id}
-      }).filter(v => v.title !== '수강취소하기');
+        const title = $(v).find(".content-title").text().replace(/ /ig, "");
+        const idEle = $(v).find("a.site-link");
+        const id = idEle.attr("onclick") ? idEle.attr("onclick").split("'")[1] : null;
+        return { title, id };
+      });
+  }
+
+  public async getList(cookie: string) {
+    return [...await this.getListByTerm(cookie), ...await this.getListByTerm(cookie, 2021, 3)];
   }
 }

@@ -55,7 +55,7 @@ export class ScheduleService {
             edDt: edDt,
             today: today,
             name,
-            item: Number(item),
+            item: item,
             kjKey: id
           };
         };
@@ -65,7 +65,7 @@ export class ScheduleService {
       if (!!scheduleArr[key])
         scheduleArr[key] = { ...scheduleArr[key], percent: percentArr[key] };
     }
-    scheduleArr = scheduleArr.map((v) => {
+    scheduleArr = id ? scheduleArr.map((v) => {
       return {
         ...v,
         edDt: this.commonService
@@ -80,7 +80,7 @@ export class ScheduleService {
             .dateParser(v.edDt)
             .diff(this.commonService.dateParser(v.today).add(2, "d")) < 0
       };
-    });
+    }) : [];
     return scheduleArr;
   }
 
