@@ -29,9 +29,13 @@ export class UserController {
 
   @Get("/getSchedule")
   @Render("user/getSchedule")
-  public async getSchedule(@Session() session: Record<string, any>) {
+  public async getSchedule(
+    @Query("year") year: number,
+    @Query("term") term: number,
+    @Session() session: Record<string, any>
+  ) {
     return {
-      courses: await this.userService.getSchedule(session.cookieStr)
+      courses: !!year && !!term ? await this.userService.getSchedule(session.cookieStr, year, term) : await this.userService.getSchedule(session.cookieStr)
     };
   }
 

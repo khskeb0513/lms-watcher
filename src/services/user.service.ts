@@ -60,8 +60,8 @@ export class UserService {
     return data;
   }
 
-  public async getSchedule(cookie: string) {
-    const courseArr = await this.eClassService.getList(cookie);
+  public async getSchedule(cookie: string, ...term: number[]) {
+    const courseArr = term.length === 0 ? await this.eClassService.getList(cookie) : await this.eClassService.getList(cookie, term[0], term[1]);
     const data = [];
     for (let i = 0; i < courseArr.length; i++) {
       data.push({

@@ -26,7 +26,10 @@ export class EClassService {
       });
   }
 
-  public async getList(cookie: string) {
-    return [...await this.getListByTerm(cookie), ...await this.getListByTerm(cookie, 2021, 3)];
+  public async getList(cookie: string, ...term: number[]) {
+    return [
+      ...await this.getListByTerm(cookie),
+      ...(term.length === 0 ? await this.getListByTerm(cookie, 2021, 3) : await this.getListByTerm(cookie, term[0], term[1]))
+    ];
   }
 }
