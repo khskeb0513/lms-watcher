@@ -11,7 +11,7 @@ export class UserController {
   @Get("/requestHisStatus")
   @Render("user/requestHisStatus")
   public async requestHisStatus(
-    @Query("item") item: number,
+    @Query("item") item: string,
     @Query("seq") seq: number,
     @Query("kjKey") kjKey: string,
     @Session() session: Record<string, any>
