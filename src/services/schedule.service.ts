@@ -179,7 +179,7 @@ export class ScheduleService {
       }
     );
     const naviAclBody = JSON.parse(naviAcl.body);
-    this.databaseService.setContent(kjKey, itemId, naviAclBody["cid"], naviAclBody["content_id"]);
+    await this.databaseService.setContent(kjKey, itemId, naviAclBody["cid"], naviAclBody["content_id"]);
     return JSON.parse(naviAcl.body);
   }
 
