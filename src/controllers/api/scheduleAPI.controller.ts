@@ -36,7 +36,7 @@ export class ScheduleAPIController {
   public async getVideo(
     @Query("kjKey") kjKey: string,
     @Query("seq") seq: number,
-    @Query("item") itemId: number,
+    @Query("item") itemId: string,
     @Session() session: Record<string, any>
   ) {
     const response = await this.scheduleService.getVideo(kjKey, seq, itemId, session.cookieStr);

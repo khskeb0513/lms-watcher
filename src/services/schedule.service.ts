@@ -146,7 +146,7 @@ export class ScheduleService {
   public async getVideo(
     kjKey: string,
     seq: number,
-    itemId: number,
+    itemId: string,
     cookie: string
   ) {
     const formAcl = await this.sessionService.moveKj(cookie, kjKey) ? await got.get(
@@ -178,6 +178,8 @@ export class ScheduleService {
         }
       }
     );
+    const naviAclBody = JSON.parse(naviAcl.body);
+    this.databaseService.setContent(kjKey, itemId, naviAclBody["cid"], naviAclBody["content_id"]);
     return JSON.parse(naviAcl.body);
   }
 
