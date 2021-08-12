@@ -38,11 +38,13 @@
       ====================
       {{#each incomplete}}
         <br>
-        {{name}}
+        <span id="content-{{item}}">
+          {{name}}
+        </span>
         <br>
         {{seq}} || {{item}} || {{edDt}} || {{percent}}
         <br>
-        <a href="#his-{{item}}" onclick="getHis('{{item}}', '{{seq}}', '{{kjKey}}')">hisCode:</a>
+        <a href="#content-{{item}}" onclick="getHis('{{item}}', '{{seq}}', '{{kjKey}}')">hisCode:</a>
         <span id="his-{{item}}"></span>
         <br>
         ==========
