@@ -28,8 +28,8 @@ export class EClassService {
 
   public async getList(cookie: string, ...term: number[]) {
     return [
+      ...(term.length === 0 ? await this.getListByTerm(cookie, 2021, 3) : await this.getListByTerm(cookie, term[0], term[1])),
       ...await this.getListByTerm(cookie),
-      ...(term.length === 0 ? await this.getListByTerm(cookie, 2021, 3) : await this.getListByTerm(cookie, term[0], term[1]))
     ];
   }
 }
