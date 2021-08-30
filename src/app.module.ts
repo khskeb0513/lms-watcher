@@ -4,7 +4,7 @@ import { ScheduleAPIController } from "./controllers/api/scheduleAPI.controller"
 import { UserAPIController } from "./controllers/api/userAPI.controller";
 import { ReportAPIController } from "./controllers/api/reportAPI.controller";
 import { UserController } from "./controllers/user.controller";
-import { CalenderAPIController } from "./controllers/api/calenderAPI.controller";
+import { CalendarAPIController } from "./controllers/api/calendarAPI.controller";
 import { IndexController } from "./controllers/index.controller";
 import { EClassService } from "./services/eClass.service";
 import { ScheduleService } from "./services/schedule.service";
@@ -13,7 +13,9 @@ import { DatabaseService } from "./services/database.service";
 import { UserService } from "./services/user.service";
 import { CommonService } from "./services/common.service";
 import { ReportService } from "./services/report.service";
-import { CalenderService } from "./services/calender.service";
+import { CalendarService } from "./services/calendar.service";
+import { HappyDormService } from './services/happyDorm.service';
+import { HappyDormAPIController } from './controllers/api/happyDormAPI.controller';
 
 
 @Module({
@@ -24,8 +26,9 @@ import { CalenderService } from "./services/calender.service";
     UserAPIController,
     ReportAPIController,
     UserController,
-    CalenderAPIController,
-    IndexController
+    CalendarAPIController,
+    IndexController,
+    HappyDormAPIController
   ],
   providers: [
     EClassService,
@@ -35,7 +38,8 @@ import { CalenderService } from "./services/calender.service";
     UserService,
     CommonService,
     ReportService,
-    CalenderService
+    CalendarService,
+    HappyDormService
   ]
 })
 export class AppModule {

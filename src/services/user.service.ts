@@ -3,7 +3,7 @@ import { EClassService } from "./eClass.service";
 import { ScheduleService } from "./schedule.service";
 import { ReportService } from "./report.service";
 import { SessionService } from "./session.service";
-import { CalenderService } from "./calender.service";
+import { CalendarService } from "./calendar.service";
 import got from "got";
 import * as cheerio from "cheerio";
 import { DatabaseService } from "./database.service";
@@ -14,7 +14,7 @@ export class UserService {
     private readonly sessionService: SessionService,
     private readonly eClassService: EClassService,
     private readonly reportService: ReportService,
-    private readonly calenderService: CalenderService,
+    private readonly calendarService: CalendarService,
     private readonly scheduleService: ScheduleService,
     private readonly databaseService: DatabaseService
   ) {
@@ -90,8 +90,8 @@ export class UserService {
     );
   }
 
-  public async getCalender(cookie: string) {
-    return (await this.calenderService.getCalender(cookie))
+  public async getCalendar(cookie: string) {
+    return (await this.calendarService.getCalendar(cookie))
       .filter((v) => new Date().valueOf() < v.startDate.valueOf())
       .map((v) => {
         return {
@@ -103,8 +103,8 @@ export class UserService {
       });
   }
 
-  public async getReportCalender(cookie: string) {
-    return (await this.calenderService.getReportCalender(cookie))
+  public async getReportCalendar(cookie: string) {
+    return (await this.calendarService.getReportCalendar(cookie))
       .filter((v) => v.endDate.valueOf() > new Date().valueOf())
       .map((v) => {
         return {
@@ -115,5 +115,10 @@ export class UserService {
             : null
         };
       });
+  }
+
+  public async getEClassCalendar(cookie: any) {
+    const response = await this.getCalendar(cookie);
+    return response.filter(v => !!v.detail.name);
   }
 }

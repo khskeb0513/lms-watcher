@@ -88,12 +88,12 @@ export class UserAPIController {
     }
   }
 
-  @Get("/getSchoolCalender")
-  public async getSchoolCalender(
+  @Get("/getSchoolCalendar")
+  public async getSchoolCalendar(
     @Session() session: Record<string, any>
   ) {
     return {
-      schoolCalender: await this.userService.getCalender(session.cookieStr)
+      schoolCalendar: await this.userService.getCalendar(session.cookieStr)
     };
   }
 

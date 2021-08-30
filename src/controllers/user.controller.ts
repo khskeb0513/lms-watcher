@@ -53,19 +53,27 @@ export class UserController {
     return;
   }
 
-  @Get("/getCalender")
-  @Render("user/getCalender")
-  public async getCalender(@Session() session: Record<string, any>) {
+  @Get("/getCalendar")
+  @Render("user/getCalendar")
+  public async getCalendar(@Session() session: Record<string, any>) {
     return {
-      calenders: await this.userService.getCalender(session.cookieStr)
+      calendars: await this.userService.getCalendar(session.cookieStr)
     };
   }
 
-  @Get("/getReportCalender")
-  @Render("user/getReportCalender")
-  public async getReportCalender(@Session() session: Record<string, any>) {
+  @Get("/getEClassCalendar")
+  @Render("user/getEClassCalendar")
+  public async getEClassCalendar(@Session() session: Record<string, any>) {
     return {
-      calenders: await this.userService.getReportCalender(session.cookieStr)
+      calendars: await this.userService.getEClassCalendar(session.cookieStr)
+    };
+  }
+
+  @Get("/getReportCalendar")
+  @Render("user/getReportCalendar")
+  public async getReportCalendar(@Session() session: Record<string, any>) {
+    return {
+      calendars: await this.userService.getReportCalendar(session.cookieStr)
     };
   }
 }

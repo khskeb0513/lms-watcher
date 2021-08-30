@@ -4,9 +4,9 @@ import * as cheerio from "cheerio";
 import * as moment from "moment";
 
 @Injectable()
-export class CalenderService {
+export class CalendarService {
 
-  public async getCalenderByDate(date: string, cookie: string) {
+  public async getCalendarByDate(date: string, cookie: string) {
     const body = (
       await got.post(
         "https://lms.pknu.ac.kr/ilos/main/main_schedule_view.acl",
@@ -58,7 +58,7 @@ export class CalenderService {
       .sort((a, b) => a.startDate.valueOf() - b.startDate.valueOf());
   }
 
-  public async getCalender(cookie: string) {
+  public async getCalendar(cookie: string) {
     const request = async (month: number) => {
       const body = (await got.post(
         "https://lms.pknu.ac.kr/ilos/main/main_schedule.acl",
@@ -73,7 +73,7 @@ export class CalenderService {
         const schoolSchedule = $(`#${month}_${i}_0`).length !== 0;
         const courseSchedule = $(`#${month}_${i}_1`).length !== 0;
         if (schoolSchedule || courseSchedule) {
-          (await this.getCalenderByDate(
+          (await this.getCalendarByDate(
             `2021${month.toString().length === 1 ? `0${month}` : month}${i.toString().length === 1 ? `0${i}` : i}`,
             cookie
           )).forEach(v => {
@@ -99,7 +99,7 @@ export class CalenderService {
     ];
   }
 
-  public async getReportCalender(cookie: string) {
+  public async getReportCalendar(cookie: string) {
     const body = (
       await got.post(
         "https://lms.pknu.ac.kr/ilos/main/main_schedule_view.acl",

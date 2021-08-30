@@ -1,12 +1,19 @@
-import { Controller, Get, Session } from "@nestjs/common";
+import { Controller, Get, Query, Session } from "@nestjs/common";
 import { EClassService } from "../../services/eClass.service";
 
 @Controller("api/eClass")
 export class EClassAPIController {
-  constructor(private readonly eClassService: EClassService) {}
+  constructor(private readonly eClassService: EClassService) {
+  }
 
   @Get("/getList")
-  public getList(@Session() session: Record<string, any>) {
-    return this.eClassService.getList(session.cookieStr);
+  public getList(
+    @Session() session: Record<string, any>, @Query("year") year: number, @Query("term") term: number
+  ) {
+    if (!year && !term) {
+      return this.eClassService.getList(session.cookieStr);
+    } else {
+      return this.eClassService.getList(session.cookieStr, year, term);
+    }
   }
 }
