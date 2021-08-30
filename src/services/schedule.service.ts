@@ -36,7 +36,7 @@ export class ScheduleService {
     const percentArr = $("div#per_text")
       .toArray()
       .map((v) => {
-        return $(v).html();
+        return { percent: $(v).html(), progressStr: $($(v).parent().children()[2]).html() };
       });
     let scheduleArr = $("span.site-mouseover-color")
       .toArray()
@@ -63,7 +63,11 @@ export class ScheduleService {
       });
     for (const key in percentArr) {
       if (!!scheduleArr[key])
-        scheduleArr[key] = { ...scheduleArr[key], percent: percentArr[key] };
+        scheduleArr[key] = {
+          ...scheduleArr[key],
+          percent: percentArr[key].percent,
+          progressStr: percentArr[key].progressStr
+        };
     }
     scheduleArr = id ? scheduleArr.map((v) => {
       return {
