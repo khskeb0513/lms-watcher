@@ -7,6 +7,7 @@ import { CalendarService } from "./calendar.service";
 import got from "got";
 import * as cheerio from "cheerio";
 import { DatabaseService } from "./database.service";
+import { BoardService } from "./board.service";
 
 @Injectable()
 export class UserService {
@@ -16,8 +17,18 @@ export class UserService {
     private readonly reportService: ReportService,
     private readonly calendarService: CalendarService,
     private readonly scheduleService: ScheduleService,
-    private readonly databaseService: DatabaseService
+    private readonly databaseService: DatabaseService,
+    private readonly boardService: BoardService
   ) {
+  }
+
+  public async getMaterialList(cookie: string) {
+    const response = await this.eClassService.getList(cookie);
+    const data = [];
+    for (const v of response) {
+      data.push({ ...v, board: await this.boardService.getMaterialListByEClassId(v.id, cookie) });
+    }
+    return data;
   }
 
   public async requestHisStatus(item: string, seq: number, kjKey: string, cookie: string) {

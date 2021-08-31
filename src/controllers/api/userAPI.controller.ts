@@ -11,6 +11,11 @@ export class UserAPIController {
   ) {
   }
 
+  @Get("/getMaterialList")
+  public async getMaterialList(@Session() session: Record<string, any>) {
+    return this.userService.getMaterialList(session.cookieStr);
+  }
+
   @Get("/getUsername")
   public async getUsername(
     @Session() session: Record<string, any>

@@ -16,6 +16,8 @@ import { ReportService } from "./services/report.service";
 import { CalendarService } from "./services/calendar.service";
 import { HappyDormService } from './services/happyDorm.service';
 import { HappyDormAPIController } from './controllers/api/happyDormAPI.controller';
+import { BoardAPIController } from './controllers/api/boardAPI.controller';
+import { BoardService } from './services/board.service';
 
 
 @Module({
@@ -28,7 +30,8 @@ import { HappyDormAPIController } from './controllers/api/happyDormAPI.controlle
     UserController,
     CalendarAPIController,
     IndexController,
-    HappyDormAPIController
+    HappyDormAPIController,
+    BoardAPIController
   ],
   providers: [
     EClassService,
@@ -39,7 +42,8 @@ import { HappyDormAPIController } from './controllers/api/happyDormAPI.controlle
     CommonService,
     ReportService,
     CalendarService,
-    HappyDormService
+    HappyDormService,
+    BoardService
   ]
 })
 export class AppModule {

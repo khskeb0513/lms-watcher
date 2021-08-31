@@ -149,7 +149,7 @@ export class ScheduleService {
 
   public async getVideo(
     kjKey: string,
-    seq: number,
+    week: number,
     itemId: string,
     cookie: string
   ) {
@@ -157,7 +157,7 @@ export class ScheduleService {
       "https://lms.pknu.ac.kr/ilos/st/course/online_view_form.acl", {
         headers: { cookie },
         searchParams: {
-          lecture_week: seq,
+          lecture_week: week,
           _KJKEY: kjKey
         }
       }
@@ -172,7 +172,7 @@ export class ScheduleService {
         form: {
           content_id: contentId,
           organization_id: 1,
-          lecture_weeks: seq,
+          lecture_weeks: week,
           navi: "current",
           item_id: itemId,
           ky: kjKey,
@@ -189,19 +189,21 @@ export class ScheduleService {
 
   public async issueHisCode(
     itemId,
-    seq,
+    week,
     kjKey,
     ud,
     cookie: string
   ) {
-    const body = await this.sessionService.moveKj(cookie, kjKey) ? await got.post(
+    const video = await this.sessionService.moveKj(cookie, kjKey) ?
+      await this.getVideo(kjKey, week, itemId, cookie) : null;
+    const body = await got.post(
       "https://lms.pknu.ac.kr/ilos/st/course/online_view_hisno.acl",
       {
         headers: { cookie },
         form: {
-          lecture_weeks: seq,
+          lecture_weeks: week,
           item_id: itemId,
-          link_seq: seq,
+          link_seq: video["link_seq"],
           kjkey: kjKey,
           _KJKEY: kjKey,
           ky: kjKey,
@@ -210,7 +212,7 @@ export class ScheduleService {
           encoding: "utf-8"
         }
       }
-    ) : null;
+    );
     const his = parseInt(JSON.parse(body.body)["his_no"]);
     return this.databaseService.setHis(his, ud, itemId);
   }
