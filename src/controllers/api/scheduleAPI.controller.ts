@@ -58,13 +58,13 @@ export class ScheduleAPIController {
 
   @Get("/requestHisStatus")
   public async requestHisStatus(
-    @Query("item") item: number,
-    @Query("seq") seq: number,
+    @Query("item") item: string,
+    @Query("seq") week: number,
     @Query("kjKey") kjKey: string,
     @Query("his") his: number,
     @Session() session: Record<string, any>
   ) {
-    return this.scheduleService.requestHisStatus(seq, item, his, kjKey, session.cookieStr);
+    return this.scheduleService.requestHisStatus(week, item, his, kjKey, session.cookieStr);
   }
 
   @Get("/getHisCode")

@@ -96,55 +96,42 @@ export class ScheduleService {
   }
 
   public async requestHisStatus(
-    seq: number,
-    item: number,
+    week: number,
+    item: string,
     his: number,
     kjKey: string,
     cookie: string
   ) {
-    if (await this.sessionService.moveKj(cookie, kjKey)) {
-      const ud = await this.getUsername(cookie);
-      await got.post(
-        "https://lms.pknu.ac.kr/ilos/st/course/online_list.acl",
-        {
-          headers: { cookie },
-          form: {
-            ky: kjKey,
-            ud,
-            WEEK_NO: seq,
-            encoding: "utf-8"
-          }
-        }
-      );
-      await got.post("https://lms.pknu.ac.kr/ilos/st/course/online_view_at.acl", {
-        headers: { cookie },
-        form: {
-          lecture_weeks: seq,
-          item_id: item,
-          link_seq: seq,
-          his_no: his,
-          ky: kjKey,
-          ud,
-          trigger_yn: "N",
-          returnData: "json",
-          encoding: "utf-8"
-        }
-      });
-      const response = await got.post("https://lms.pknu.ac.kr/ilos/st/course/online_view_status.acl", {
-        form: {
-          lecture_weeks: seq,
-          item_id: item,
-          link_seq: seq,
-          his_no: his,
-          ky: kjKey,
-          ud,
-          returnData: "json",
-          encoding: "utf-8"
-        },
-        headers: { cookie }
-      });
-      return response.statusCode;
-    }
+    const ud = await this.getUsername(cookie);
+    const seq = (await this.getVideo(kjKey, week, item, cookie))["link_seq"];
+    await got.post("https://lms.pknu.ac.kr/ilos/st/course/online_view_at.acl", {
+      headers: { cookie },
+      form: {
+        lecture_weeks: week,
+        item_id: item,
+        link_seq: seq,
+        his_no: his,
+        ky: kjKey,
+        ud,
+        trigger_yn: "N",
+        returnData: "json",
+        encoding: "utf-8"
+      }
+    });
+    const response = await got.post("https://lms.pknu.ac.kr/ilos/st/course/online_view_status.acl", {
+      form: {
+        lecture_weeks: week,
+        item_id: item,
+        link_seq: seq,
+        his_no: his,
+        ky: kjKey,
+        ud,
+        returnData: "json",
+        encoding: "utf-8"
+      },
+      headers: { cookie }
+    });
+    return response.statusCode;
   }
 
   public async getVideo(
