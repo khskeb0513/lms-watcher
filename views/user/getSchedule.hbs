@@ -20,7 +20,7 @@
   <br>
   name
   <br>
-  seq || item || edDt || percent
+  seq || item || edDt || percent ( progress string )
   <br>
   ==========
   <br>
@@ -42,7 +42,7 @@
           {{name}}
         </span>
         <br>
-        {{seq}} || {{item}} || {{edDt}} || {{percent}}
+        {{seq}} || {{item}} || {{edDt}} || {{percent}} ( {{progressStr}} )
         <br>
         <a href="#content-{{item}}" onclick="getHis('{{item}}', '{{seq}}', '{{kjKey}}')">hisCode:</a>
         <span id="his-{{item}}"></span>
