@@ -74,7 +74,7 @@
 <script>
   document.querySelector("#locale").innerHTML = new Date({{his/timestamp}}).toLocaleString();
   const requestHis = (item, seq, kjKey, his) => {
-    fetch(`/api/schedule/requestHisStatus?item${item}&seq=${seq}&kjKey=${kjKey}&his=${his}`).then(async r => {
+    fetch(`/api/schedule/requestHisStatus?item=${item}&seq=${seq}&kjKey=${kjKey}&his=${his}`).then(async r => {
       document.querySelector("#status").innerHTML = await r.text();
     });
   };
